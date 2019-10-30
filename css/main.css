@@ -1,0 +1,48 @@
+html, body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #e2dbd3;
+    font-size: 13px;
+    font-family: lato, sans-serif;
+    font-weight: 400;
+    color: #444;
+    line-height: 140%;
+    letter-spacing: 1px;
+}
+
+input {
+    --w: 300px;
+    --py: 5px;
+    --px: 10px;
+    width: var(--w);
+    height: 30px;
+    border: 0;
+    padding: var(--py) var(--px);
+}
+input[type="submit"] {
+    width: calc(2*var(--px) + var(--w));
+    background-color: #b05c3f;
+    color: #fff;
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.col {
+    width: calc(50% - 30px);
+    margin: 15px;
+}
