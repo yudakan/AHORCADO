@@ -1,8 +1,11 @@
 class Scene {
 
+    // Attributes
+    geometry = [];
+    lights = [];
+    cameras = [];
+
     constructor() {
-        this.geometry = [];
-        this.lights = [];
-        this.cameras = [];
+        
     }
 }

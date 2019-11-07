@@ -1,5 +1,8 @@
 class Transform {
 
+    // Attributes
+    matrix;
+
     constructor(mx) {
 
         // Filter
@@ -70,26 +73,17 @@ class Transform {
                 this.matrix.me[j][i] = rotated.me[j][i];
     }
 
-    rotate(angles) {
-        if (angles.length != 3)
-            throw new Error("Format Exception -.-");
+    // rotate(angles) {
+    //     if (angles.length != 3)
+    //         throw new Error("Format Exception -.-");
 
-        // x
-        this.matrix.me[1][1] = Math.cos(angles[0] + Math.acos(this.matrix.me[1][1]));
-        this.matrix.me[1][2] = Math.sin(angles[0] + Math.asin(this.matrix.me[1][2]));
-        this.matrix.me[2][1] = Math.cos(angles[0] + Math.acos(this.matrix.me[2][1]));
-        this.matrix.me[2][2] = Math.sin(angles[0] + Math.asin(this.matrix.me[2][2]));
+    //     // x
+        
+    //     // y
 
-        // y
-        this.matrix.me[0][0] = Math.cos(angles[1] + Math.acos(this.matrix.me[0][0]));
-        this.matrix.me[0][2] = Math.sin(angles[1] + Math.asin(this.matrix.me[0][2]));
-        this.matrix.me[2][0] = Math.cos(angles[1] + Math.acos(this.matrix.me[2][0]));
-        this.matrix.me[2][2] = Math.sin(angles[1] + Math.asin(this.matrix.me[2][2]));
+    //     // z
 
-        // this.rotateX(angles[0]);
-        // this.rotateY(angles[1]);
-        // this.rotateZ(angles[2]);
-    }
+    // }
 
     clone() {
         return new Transform(this.matrix);

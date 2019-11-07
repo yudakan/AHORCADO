@@ -1,5 +1,8 @@
 class SquareMatrix {
 
+    // Attributes
+    order; me;
+
     constructor(arr) {
 
         // Filter

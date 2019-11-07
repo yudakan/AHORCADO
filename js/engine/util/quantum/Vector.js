@@ -1,5 +1,8 @@
 class Vector {
 
+    // Attributes
+    dim; me;
+
     constructor(arr) {
 
         // Filter
@@ -77,7 +80,7 @@ class Vector {
         if (this.dim != v.dim)
             throw new Error("Not same dimension u.u");
         else if (this.dim != 3)
-            throw new Error("Cross product just lives in three-dimensional space, not "+dim+"d space o.o");
+            throw new Error("Cross product just lives in three-dimensional space (R^3), not "+dim+"d space o.o");
 
         let x = this.me[1]*v.me[2] - this.me[2]*v.me[1];
         let y = this.me[2]*v.me[0] - this.me[0]*v.me[2];
