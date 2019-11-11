@@ -86,6 +86,24 @@ class Transform {
         if (angles[2] != 0) this.rotateZ(angles[2]);
     }
 
+    toMyWorld(v) {
+        if (!(v instanceof Vector))
+            throw new Error('Vector needed -.-"');
+        if (v.dim != 3)
+            throw new Error("3 components neded o.o");
+
+        return this.matrix.inverse().multiply(v.concat([1])).slice(0,3);
+    }
+
+    toYourWorld(v) {
+        if (!(v instanceof Vector))
+            throw new Error('Vector needed -.-"');
+        if (v.dim != 3)
+            throw new Error("3 components neded o.o");
+
+        return this.matrix.multiply(v.concat([1])).slice(0,3);
+    }
+
     clone() {
         return new Transform(this.matrix);
     }

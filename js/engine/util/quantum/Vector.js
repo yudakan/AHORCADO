@@ -79,7 +79,7 @@ class Vector {
     cross(v) {
         if (this.dim != v.dim)
             throw new Error("Not same dimension u.u");
-        else if (this.dim != 3)
+        if (this.dim != 3)
             throw new Error("Cross product just lives in three-dimensional space (R^3), not "+dim+"d space o.o");
 
         let x = this.me[1]*v.me[2] - this.me[2]*v.me[1];
@@ -121,7 +121,7 @@ class Vector {
 
     normalize() {
         let len = this.length();
-        normalized = this.clone();
+        let normalized = this.clone();
         for (let i=0; i < this.dim; i++)
             normalized.me[i] /= len;
 
