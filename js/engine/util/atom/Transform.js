@@ -37,9 +37,11 @@ class Transform {
     rotateX(alpha) {
         let rx = new SquareMatrix([
             [1, 0, 0],
-            [0, Math.cos(alpha), -Math.sin(alpha)],
-            [0, Math.sin(alpha), Math.cos(alpha)]
-        ]).transpose();
+            [0, Math.cos(alpha), Math.sin(alpha)],
+            [0, -Math.sin(alpha), Math.cos(alpha)]
+        ]);
+
+        console.log(SquareMatrix.minor(this.matrix, 3, 3));
 
         let rotated = rx.multiply(SquareMatrix.minor(this.matrix, 3, 3));
         for (let j=0; j < 3; j++)
@@ -52,7 +54,7 @@ class Transform {
             [Math.cos(alpha), 0, Math.sin(alpha)],
             [0, 1, 0],
             [-Math.sin(alpha), 0, Math.cos(alpha)]
-        ]).transpose();
+        ]);
 
         let rotated = ry.multiply(SquareMatrix.minor(this.matrix, 3, 3));
         for (let j=0; j < 3; j++)
@@ -62,10 +64,10 @@ class Transform {
 
     rotateZ(alpha) {
         let rz = new SquareMatrix([
-            [Math.cos(alpha), -Math.sin(alpha), 0],
-            [Math.sin(alpha), Math.cos(alpha), 0],
+            [Math.cos(alpha), Math.sin(alpha), 0],
+            [-Math.sin(alpha), Math.cos(alpha), 0],
             [0, 0, 1]
-        ]).transpose();
+        ]);
 
         let rotated = rz.multiply(SquareMatrix.minor(this.matrix, 3, 3));
         for (let j=0; j < 3; j++)
@@ -73,17 +75,14 @@ class Transform {
                 this.matrix.me[j][i] = rotated.me[j][i];
     }
 
-    // rotate(angles) {
-    //     if (angles.length != 3)
-    //         throw new Error("Format Exception -.-");
+    rotate(angles) {
+        if (angles.length != 3)
+            throw new Error("Format Exception -.-");
 
-    //     // x
-        
-    //     // y
-
-    //     // z
-
-    // }
+        if (angles[0] != 0) this.rotateX(angles[0]);
+        if (angles[1] != 0) this.rotateY(angles[1]);
+        if (angles[2] != 0) this.rotateZ(angles[2]);
+    }
 
     clone() {
         return new Transform(this.matrix);
