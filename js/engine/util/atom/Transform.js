@@ -8,11 +8,13 @@ class Transform {
         // Filter
         if (!mx) {
             mx = new SquareMatrix([
+            // R = <o, i, j, k>        World Orthonormal Basis
+            // R' = <o', i', j', k'>   Object Orthonormal Basis
             //   x  y  z
-                [1, 0, 0, 0], // x
-                [0, 1, 0, 0], // y
-                [0, 0, 1, 0], // z
-                [0, 0, 0, 1]  // p
+                [1, 0, 0, 0], // i'
+                [0, 1, 0, 0], // j'
+                [0, 0, 1, 0], // k'
+                [0, 0, 0, 1]  // o'
             ]);
         }
         if (mx.order != 4)

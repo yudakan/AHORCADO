@@ -18,7 +18,9 @@ class Camera extends Stageable {
         if (!(point instanceof Vector))
             throw new Error('Vector needed -.-"');
 
-        // TODO: Camera.lookAt()
+        // Camera points to -j'
+        
+
     }
 
     getFrame() {
