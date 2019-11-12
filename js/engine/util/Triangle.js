@@ -22,6 +22,10 @@ class Triangle extends Stageable {
             this.points = [new Vector([1,0,0]), new Vector([0,1,0]), new Vector([0,0,1])];
     }
 
+    getColor() {
+        return Color.GREY;
+    }
+
     clone() {
         return new Triangle(this.points, super.tr);
     }
