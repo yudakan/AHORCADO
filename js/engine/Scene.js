@@ -5,6 +5,8 @@ class Scene {
     lights = [];
     cameras = [];
 
+    // TODO: How to organize Nulls?
+
     constructor() {
         
     }
