@@ -46,3 +46,18 @@ input[type="submit"] {
     width: calc(50% - 30px);
     margin: 15px;
 }
+
+.contRender {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: flex-start;
+    width: calc(200px * 3);
+}
+
+.pixel {
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+}

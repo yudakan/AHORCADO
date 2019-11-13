@@ -6,7 +6,7 @@ class CamSettings {
     rasterWidth;
     rasterHeight;
 
-    constructor(canvasWidth=16, canvasHeight=9, rasterWidth=1920, rasterHeight=1080) {
+    constructor(canvasWidth=2, canvasHeight=1, rasterWidth=200, rasterHeight=100) {
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.rasterWidth = rasterWidth;

@@ -23,7 +23,7 @@ class Triangle extends Stageable {
     }
 
     getColor() {
-        return Color.GREY;
+        return Color.NAVY;
     }
 
     clone() {

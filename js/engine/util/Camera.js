@@ -22,7 +22,7 @@ class Camera extends Stageable {
         if (this.scene == null)
             throw new Error("I'm not in scene :'c");
 
-        raster = Utilities.create2Array(this.settings.rasterHeight, this.settings.rasterWidth, Color.BLACK);
+        let raster = Utilities.create2Array(this.settings.rasterHeight, this.settings.rasterWidth, Color.BLACK);
         let xunit = this.settings.canvasWidth / this.settings.rasterWidth;
         let zunit = this.settings.canvasHeight / this.settings.rasterHeight;
         let xoffset = this.settings.canvasWidth / 2;

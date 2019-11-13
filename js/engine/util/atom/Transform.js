@@ -43,8 +43,6 @@ class Transform {
             [0, -Math.sin(alpha), Math.cos(alpha)]
         ]);
 
-        console.log(SquareMatrix.minor(this.matrix, 3, 3));
-
         let rotated = rx.multiply(SquareMatrix.minor(this.matrix, 3, 3));
         for (let j=0; j < 3; j++)
             for (let i=0; i < 3; i++)
@@ -92,7 +90,7 @@ class Transform {
         if (v.dim != 3)
             throw new Error("3 components neded o.o");
 
-        return this.matrix.inverse().multiply(v.concat([1])).slice(0,3);
+        return v.concat([1]).multiply(this.matrix.inverse()).slice(0,3);
     }
 
     toYourWorld(v) {
@@ -101,7 +99,7 @@ class Transform {
         if (v.dim != 3)
             throw new Error("3 components neded o.o");
 
-        return this.matrix.multiply(v.concat([1])).slice(0,3);
+        return v.concat([1]).multiply(this.matrix).slice(0,3);
     }
 
     clone() {
