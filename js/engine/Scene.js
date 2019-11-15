@@ -1,21 +1,22 @@
 class Scene {
 
     // Attributes
-    geometry = [];
-    lights = [];
-    cameras = [];
+    objects = [];
 
-    // TODO: How to organize Nulls?
-
-    constructor() {
-        
+    constructor(objects) {
+        this.add(objects);
     }
 
-    addCamera(cam) {
-        if (!(cam instanceof Camera))
-            throw new Error('Not a Camera -_-"');
+    add(objects) {
+        if (!Array.isArray(objects))
+            throw new Error('This is not an array! >_<');
+        
+        for (let i=0; i < objects.length; i++)
+            if (!(objects[i] instanceof Stageable))
+                throw new Error('Not Stageable element found! è.é');
+            else
+                objects[i].linkToOutsideWorld(this);
 
-        cam.scene = this;
-        this.cameras.push(cam);
+        this.objects = this.objects.concat(objects);
     }
 }

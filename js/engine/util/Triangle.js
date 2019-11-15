@@ -3,8 +3,8 @@ class Triangle extends Stageable {
     // Attributes
     points;
 
-    constructor(points, transform) {
-        super(transform);
+    constructor(points, transform, parentLinked) {
+        super(transform, parentLinked);
 
         // Filter
         if (points) {
@@ -27,6 +27,6 @@ class Triangle extends Stageable {
     }
 
     clone() {
-        return new Triangle(this.points, super.tr);
+        return new Triangle(this.points, super.tr, super.parentLinked);
     }
 }

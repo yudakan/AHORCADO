@@ -84,22 +84,38 @@ class Transform {
         if (angles[2] != 0) this.rotateZ(angles[2]);
     }
 
-    toMyWorld(v) {
-        if (!(v instanceof Vector))
-            throw new Error('Vector needed -.-"');
-        if (v.dim != 3)
-            throw new Error("3 components neded o.o");
+    toMyWorld(e) {
+        if (e instanceof Vector) {
+            if (e.dim != 3)
+                throw new Error("3 components neded o.o");
 
-        return v.concat([1]).multiply(this.matrix.inverse()).slice(0,3);
+            return e.concat([1]).multiply(this.matrix.inverse()).slice(0,3);
+        }
+        else if (e instanceof SquareMatrix) {
+            if (e.order != 4)
+                throw new Error("4x4 matrix neded o.o");
+
+            return e.multiply(this.matrix.inverse());
+        }
+
+        throw new Error('Vector or SquareMatrix needed -_-');
     }
 
     toYourWorld(v) {
-        if (!(v instanceof Vector))
-            throw new Error('Vector needed -.-"');
-        if (v.dim != 3)
-            throw new Error("3 components neded o.o");
+        if (e instanceof Vector) {
+            if (e.dim != 3)
+                throw new Error("3 components neded o.o");
 
-        return v.concat([1]).multiply(this.matrix).slice(0,3);
+            return e.concat([1]).multiply(this.matrix).slice(0,3);
+        }
+        else if (e instanceof SquareMatrix) {
+            if (e.order != 4)
+                throw new Error("4x4 matrix neded o.o");
+
+            return e.multiply(this.matrix());
+        }
+
+        throw new Error('Vector or SquareMatrix needed -_-');
     }
 
     clone() {

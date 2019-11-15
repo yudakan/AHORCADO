@@ -4,16 +4,19 @@ class Mesh extends Stageable {
     static idMax = -1;
     id; name; polys;
 
-    constructor(triangles, name, transform) {
-        super(transform);
+    constructor(triangles, name, transform, parentLinked) {
+        super(transform, parentLinked);
 
         // Filter
         if (!triangles) throw new Error("Triangles needed :/");
         if (!Array.isArray(triangles))
             throw new Error("This is not an Array >.<");
+
         for (let i=0; i < triangles.length; i++)
             if (!(triangles[i] instanceof Triangle))
-                throw new Error('Not a triangle ^^"');
+                throw new Error('Not a triangle ^_^"');
+            else
+                triangles[i].linkToOutsideWorld(this);
 
         Mesh.idMax++;
         if (!name) name = 'mesh'+Mesh.idMax;
@@ -31,6 +34,6 @@ class Mesh extends Stageable {
                 triangles[i] = this.polys[i].clone();
         }
 
-        return new Mesh(triangles, this.name+'#', super.tr);
+        return new Mesh(triangles, this.name+'#', super.parentLinked);
     }
 }

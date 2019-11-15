@@ -48,4 +48,8 @@ class Color {
     setB(val) {
         return new Color(val & 0xFF) | (this.me & 0xFFFF00);
     }
+
+    clone() {
+        return new Color(this.me);
+    }
 }

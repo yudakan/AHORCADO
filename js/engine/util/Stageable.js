@@ -1,13 +1,44 @@
 class Stageable {
 
     // Attributes
-    tr;
+    tr; parentLinked;
 
-    constructor(transform) {
+    constructor(transform=new Transform(), parentLinked=null) {
+        if (!(transform instanceof Transform))
+            throw new Error('Transform reference needed ò_ó');
 
-        if (!transform) transform = new Transform();
         this.tr = transform.clone();
+        this.parentLinked = parentLinked;
     }
+
+    linkToOutsideWorld(parentLinked) {
+        if (!(parentLinked instanceof Stageable))
+            throw new Error('Stageable reference needed ò3ó');
+        
+        this.parentLinked = parentLinked;
+    }
+
+    // toWorld(object) {
+    //     if (!(object instanceof Stageable))
+    //         throw new Error('Stageable needed -_-');
+
+    //     // object to global world (down)
+    //     if (object instanceof Scene) {}
+    //     else if (object.parentLinked == null) {}
+    //     else {}
+
+    //     return this.toWorld();
+
+    //     // object to this world (up)
+    // }
+
+    // toDownWorld() {
+    //     return this.toDownWorld(this);
+    // }
+
+    // toUpWorld(object) {
+        
+    // }
 
     lookAt(point, back=false) {
         if (!(point instanceof Vector))

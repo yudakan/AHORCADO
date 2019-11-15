@@ -4,8 +4,8 @@ class Light extends Stageable {
     static idMax = -1;
     id; name; color; intensity;
 
-    constructor(color, intensity, name, transform) {
-        super(transform);
+    constructor(color, intensity, name, transform, parentLinked) {
+        super(transform, parentLinked);
 
         // Filter
         if (!(color instanceof Color))
