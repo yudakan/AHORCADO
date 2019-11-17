@@ -1,16 +1,12 @@
 class Null extends Stageable {
 
     // Attributes
-    static idMax = -1;
-    id; name; objects = [];
+    name; objects = [];
 
     constructor(name, transform, parentLinked) {
         super(transform, parentLinked);
 
-        Null.idMax++;
-        if (!name) name = 'null'+Null.idMax;
-
-        this.id = Null.idMax;
+        if (!name) name = 'null'+this.id;
         this.name = name;
     }
 

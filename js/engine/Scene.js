@@ -15,8 +15,12 @@ class Scene {
             if (!(objects[i] instanceof Stageable))
                 throw new Error('Not Stageable element found! è.é');
             else
-                objects[i].linkToOutsideWorld(this);
-
-        this.objects = this.objects.concat(objects);
+                for (let j=0; j < this.objects.length; j++)
+                    if (this.objects[j].id == objects[i].id)
+                        throw new Error(objects[i]+' is already in scene ovo');
+                    else {
+                        objects[i].linkToOutsideWorld(this);
+                        this.objects.push(objects[i]);
+                    }
     }
 }

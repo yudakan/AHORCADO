@@ -1,8 +1,7 @@
 class Camera extends Stageable {
 
     // Attributes
-    static idMax = -1;
-    id; name; settings; raster;
+    name; settings; raster;
 
     constructor(name, settings=new CamSettings(), transform, parentLinked) {
         super(transform, parentLinked);
@@ -10,10 +9,8 @@ class Camera extends Stageable {
         if (!(settings instanceof CamSettings))
             throw new Error('What is this? -o-"');
 
-        Camera.idMax++;
-        if (!name) name = 'cam'+Camera.idMax;
+        if (!name) name = 'cam'+this.id;
 
-        this.id = Camera.idMax;
         this.name = name;
         this.settings = settings;
         this.raster = Utilities.create2Array(this.settings.rasterHeight, this.settings.rasterWidth, this.settings.bgColor);

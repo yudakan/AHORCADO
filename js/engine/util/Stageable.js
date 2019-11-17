@@ -1,12 +1,14 @@
 class Stageable {
 
     // Attributes
-    tr; parentLinked;
+    static idMax = -1;
+    id; tr; parentLinked;
 
     constructor(transform=new Transform(), parentLinked=null) {
         if (!(transform instanceof Transform))
             throw new Error('Transform reference needed ò_ó');
 
+        this.id = Stageable.idMax++;
         this.tr = transform.clone();
         this.parentLinked = parentLinked;
     }
@@ -18,25 +20,27 @@ class Stageable {
         this.parentLinked = parentLinked;
     }
 
-    // toWorld(object) {
+    // toWorld(object) { // returns tr
     //     if (!(object instanceof Stageable))
     //         throw new Error('Stageable needed -_-');
 
-    //     // object to global world (down)
-    //     if (object instanceof Scene) {}
-    //     else if (object.parentLinked == null) {}
-    //     else {}
+    //     let newTR;
 
-    //     return this.toWorld();
+    //     // object to global world (down)
+    //     newTR = this.toDownWorld(this, null);
 
     //     // object to this world (up)
+    //     this.toUpWorld(newTR, object);
+
+    //     return newTR;
     // }
 
-    // toDownWorld() {
-    //     return this.toDownWorld(this);
+    // static toDownWorld(object, objectEnd=null) {
+        
+    //     return object.tr.toYourWorld(object.tr.matrix)
     // }
 
-    // toUpWorld(object) {
+    // static toUpWorld(object, objectEnd) {
         
     // }
 

@@ -1,8 +1,7 @@
 class Light extends Stageable {
 
     // Attributes
-    static idMax = -1;
-    id; name; color; intensity;
+    name; color; intensity;
 
     constructor(color, intensity, name, transform, parentLinked) {
         super(transform, parentLinked);
@@ -15,10 +14,8 @@ class Light extends Stageable {
         if (intensity < 0)
             throw new Error('I do not understand negative intensity o3o');
 
-        Light.idMax++;
-        if (!name) name = 'light'+Light.idMax;
+        if (!name) name = 'light'+this.id;
 
-        this.id = Light.idMax;
         this.name = name;
         this.color = color;
         this.intensity = intensity > 1 ? 1 : intensity;

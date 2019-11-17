@@ -1,8 +1,7 @@
 class Mesh extends Stageable {
 
     // Attributes
-    static idMax = -1;
-    id; name; polys;
+    name; polys;
 
     constructor(triangles, name, transform, parentLinked) {
         super(transform, parentLinked);
@@ -18,10 +17,8 @@ class Mesh extends Stageable {
             else
                 triangles[i].linkToOutsideWorld(this);
 
-        Mesh.idMax++;
-        if (!name) name = 'mesh'+Mesh.idMax;
-
-        this.id = Mesh.idMax;
+        if (!name) name = 'mesh'+this.id;
+    
         this.name = name;
         this.polys = triangles;
     }
