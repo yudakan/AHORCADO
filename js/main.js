@@ -52,9 +52,7 @@ const renderFrame = () => {
   for (let j = 0; j < frame.length; j++)
     for (let i = 0; i < frame[0].length; i++) {
       const pixel = frame[j][i].me;
-      // if (pixel !== 8421504) console.log(pixel);
       canvas.fillStyle = `#${pad(new Number(pixel).toString(16), 6)}`;
-      // canvas.fillStyle = "#008000";
       canvas.fillRect(i, j, 1, 1);
     }
   let canvasDrawT2 = performance.now();
@@ -62,9 +60,6 @@ const renderFrame = () => {
   console.log(
     "Draw on canvas took " + (canvasDrawT2 - canvasDrawT1) + " milliseconds."
   );
-
-  // Render took 238.31499999505468 milliseconds.
-  // Draw on canvas took 6795.750000004773 milliseconds.
 
   // Allow new renders
   rendering = false;
