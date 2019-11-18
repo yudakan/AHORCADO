@@ -11,7 +11,7 @@ class Null extends Stageable {
         this.name = name ? name : 'null'+this.id;
     }
 
-    add(objects, preserveWorld=true) {
+    add(objects, preserveWorld=true) { // TODO: preserveWorld
         if (!Array.isArray(objects))
             throw new Error("This is not an Array >.<");
 
