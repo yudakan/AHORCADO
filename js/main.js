@@ -1,7 +1,7 @@
 const pad = (n, width, z) => {
-  z = z || "0";
-  n = n + "";
-  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+	z = z || "0";
+	n = n + "";
+	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 };
 
 // Marc's magic ^o^
@@ -13,9 +13,9 @@ scene.add([cam]);
 
 let rendering = false;
 const renderFrame = () => {
-  // Prevent new renders if already rendering
-  if (rendering) throw new Error("Already rendering");
-  rendering = true;
+	// Prevent new renders if already rendering
+	if (rendering) throw new Error("Already rendering");
+	rendering = true;
 
   // Get frame
   let getFrameT1 = performance.now();
@@ -23,28 +23,36 @@ const renderFrame = () => {
   let getFrameT2 = performance.now();
   console.log("Render took " + (getFrameT2 - getFrameT1) + " milliseconds.");
 
-  // Get canvas
-  const canvasElement = document.getElementById("canvas");
-  const canvas = canvasElement.getContext("2d");
-  canvasElement.width = 600;
-  canvasElement.height = 300;
+	// Get frame
+	let getFrameT1 = performance.now();
+	let frame = cam.getFrame();
+	let getFrameT2 = performance.now();
+	console.log("Render took " + (getFrameT2 - getFrameT1) + " milliseconds.");
 
-  // Render on canvas
-  let canvasDrawT1 = performance.now();
-  for (let j = 0; j < frame.length; j++)
-    for (let i = 0; i < frame[0].length; i++) {
-      const pixel = frame[j][i].me;
-      canvas.fillStyle = `#${pad(new Number(pixel).toString(16), 6)}`;
-      canvas.fillRect(i, j, 1, 1);
-    }
-  let canvasDrawT2 = performance.now();
+	// Get canvas
+	const canvasElement = document.getElementById("canvas");
+	const canvas = canvasElement.getContext("2d");
+	canvasElement.width = 600;
+	canvasElement.height = 300;
 
-  console.log(
-    "Draw on canvas took " + (canvasDrawT2 - canvasDrawT1) + " milliseconds."
-  );
+	// Render on canvas
+	let canvasDrawT1 = performance.now();
+	for (let j = 0; j < frame.length; j++)
+		for (let i = 0; i < frame[0].length; i++) {
+			const pixel = frame[j][i].me;
+			canvas.fillStyle = `#${pad(new Number(pixel).toString(16), 6)}`;
+			canvas.fillRect(i, j, 1, 1);
+		}
+	let canvasDrawT2 = performance.now();
 
-  // Allow new renders
-  rendering = false;
+	console.log(
+		"Draw on canvas took " + (canvasDrawT2 - canvasDrawT1) + " milliseconds."
+	);
+
+	console.log(cam);
+
+	// Allow new renders
+	rendering = false;
 };
 
 const readUploadedFileAsText = inputFile => {

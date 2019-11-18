@@ -26,7 +26,7 @@ class Ray {
         let c = triangleGear[2];
 
         // Back camera?
-        if (a.me[1] < 1 || b.me[1] < 1 || c.me[1] < 1)
+        if (a.me[1] < 1 || b.me[1] < 1 || c.me[1] < 1) // TODO: Large triangles?
             return false;
 
         // Ray and plane ab+ac intersection
@@ -67,7 +67,11 @@ class Ray {
         let y2 = sol2[1];
         t = sol2[2]; // it should be the same value
 
-        if (x2 < 0 || y2 < 0) return false; // in plane but not in triangle   
+        if (x2 < 0 || y2 < 0) return false; // in plane but not in triangle
+
+        console.log(a);
+        console.log(b);
+        console.log(c);
 
         return this.p.add( this.d.scale(t) );
     }
