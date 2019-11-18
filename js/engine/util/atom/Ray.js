@@ -17,31 +17,13 @@ class Ray {
         this.linkedCam = linkedCam;
     }
 
-    intersect(triangle, trsOthersWorlds, trsToRayWorld) {
-        if (!(triangle instanceof Triangle))
-            throw new Error("Triangle needed -3-");
-        if (!Array.isArray(trsOthersWorlds))
-            throw new Error("Array needed n3n");
-        if (!Array.isArray(trsToRayWorld))
-            throw new Error("Array needed n3n");
+    intersect(triangleGear) {
+        if (!(triangleGear[3] instanceof Triangle))
+            throw new Error("What the fuck? @_@");
 
-        let a = triangle.tr.toYourWorld(triangle.points[0]);
-        let b = triangle.tr.toYourWorld(triangle.points[1]);
-        let c = triangle.tr.toYourWorld(triangle.points[2]);
-
-        // All transformations to global world
-        for (let i=0; i < trsOthersWorlds.length; i++) {
-            a = trsOthersWorlds[i].toYourWorld(a);
-            b = trsOthersWorlds[i].toYourWorld(b);
-            c = trsOthersWorlds[i].toYourWorld(c);
-        }
-
-        // All transformations to ray world
-        for (let i=0; i < trsToRayWorld.length; i++) {
-            a = trsToRayWorld[i].toMyWorld(a);
-            b = trsToRayWorld[i].toMyWorld(b);
-            c = trsToRayWorld[i].toMyWorld(c);
-        }
+        let a = triangleGear[0];
+        let b = triangleGear[1];
+        let c = triangleGear[2];
 
         // Back camera?
         if (a.me[1] < 1 || b.me[1] < 1 || c.me[1] < 1)
@@ -94,21 +76,16 @@ class Ray {
         let yDepth = Ray.MAX_DEPTH;
         let firstTriangle;
 
-        // Loop all geometry
-        for (let i=0; i < this.linkedCam.scene.geometry.length; i++)
-            for (let j=0; j < this.linkedCam.scene.geometry[i].polys.length; j++) {
+        // Loop all triangles
+        for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
                 
-                let point = this.intersect(
-                    this.linkedCam.scene.geometry[i].polys[j],
-                    [this.linkedCam.scene.geometry[i].tr],
-                    [this.linkedCam.tr]
-                );
+            let intersection = this.intersect( this.linkedCam.trianglesGears[i] );
 
-                if (point && point.me[1] < yDepth) {
-                    yDepth = point.me[1];
-                    firstTriangle = this.linkedCam.scene.geometry[i].polys[j];
-                }
+            if (intersection && intersection.me[1] < yDepth) {
+                yDepth = intersection.me[1];
+                firstTriangle = this.linkedCam.trianglesGears[i][3];
             }
+        }
 
         // Return color
         return firstTriangle ? firstTriangle.getColor() : this.linkedCam.settings.bgColor;

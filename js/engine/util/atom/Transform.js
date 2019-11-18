@@ -84,7 +84,7 @@ class Transform {
         if (angles[2] != 0) this.rotateZ(angles[2]);
     }
 
-    toMyWorld(e) {
+    outsideToMyWorld(e) {
         if (e instanceof Vector) {
             if (e.dim != 3)
                 throw new Error("3 components neded o.o");
@@ -101,7 +101,7 @@ class Transform {
         throw new Error('Vector or SquareMatrix needed -_-');
     }
 
-    toYourWorld(v) {
+    myWorldToOutside(e) {
         if (e instanceof Vector) {
             if (e.dim != 3)
                 throw new Error("3 components neded o.o");
@@ -112,7 +112,7 @@ class Transform {
             if (e.order != 4)
                 throw new Error("4x4 matrix neded o.o");
 
-            return e.multiply(this.matrix());
+            return e.multiply(this.matrix);
         }
 
         throw new Error('Vector or SquareMatrix needed -_-');

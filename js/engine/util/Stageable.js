@@ -1,8 +1,9 @@
 class Stageable {
 
     // Attributes
-    static idMax = -1;
+    static idMax = 0;
     id; tr; parentLinked;
+    ghost = false;
 
     constructor(transform=new Transform(), parentLinked=null) {
         if (!(transform instanceof Transform))
@@ -10,41 +11,27 @@ class Stageable {
 
         this.id = Stageable.idMax++;
         this.tr = transform.clone();
-        this.parentLinked = parentLinked;
+        this.parentLinked = parentLinked; // CAUTION! We're assuming programmer knows what he is doing...
     }
 
     linkToOutsideWorld(parentLinked) {
-        if (!(parentLinked instanceof Stageable))
+        if (!(parentLinked instanceof Stageable) && !(parentLinked instanceof Scene))
             throw new Error('Stageable reference needed ò3ó');
         
         this.parentLinked = parentLinked;
     }
 
-    // toWorld(object) { // returns tr
-    //     if (!(object instanceof Stageable))
-    //         throw new Error('Stageable needed -_-');
+    breakLink() {
+        this.parentLinked = null;
+    }
 
-    //     let newTR;
+    setGhost(bol) {
+        if (typeof bol !== 'boolean')
+            throw new Error('Not a boolean value 7.7');
+        this.ghost = bol;
+    }
 
-    //     // object to global world (down)
-    //     newTR = this.toDownWorld(this, null);
-
-    //     // object to this world (up)
-    //     this.toUpWorld(newTR, object);
-
-    //     return newTR;
-    // }
-
-    // static toDownWorld(object, objectEnd=null) {
-        
-    //     return object.tr.toYourWorld(object.tr.matrix)
-    // }
-
-    // static toUpWorld(object, objectEnd) {
-        
-    // }
-
-    lookAt(point, back=false) {
+    lookAt(point, back=false) { // TODO: what reference tr?
         if (!(point instanceof Vector))
             throw new Error('Vector needed -.-"');
         if (point.dim != 3)
@@ -53,7 +40,7 @@ class Stageable {
         /* Object points to j' */
         /* i' always parallel to plane xi+yj=0 */
         /* the following notation will not have ' but still refers to it */
-        // vector from p to point
+        // vector from o to point
         let p = new Vector([
             this.tr.matrix.me[3][0],
             this.tr.matrix.me[3][1],

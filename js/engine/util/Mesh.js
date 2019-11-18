@@ -1,36 +1,51 @@
 class Mesh extends Stageable {
 
     // Attributes
-    name; polys;
+    name; objects = [];
 
-    constructor(triangles, name, transform, parentLinked) {
+    constructor(name='', transform, parentLinked) {
         super(transform, parentLinked);
+        if (typeof name !== 'string')
+            throw new Error('Not a string ¬3¬');
 
-        // Filter
-        if (!triangles) throw new Error("Triangles needed :/");
-        if (!Array.isArray(triangles))
-            throw new Error("This is not an Array >.<");
-
-        for (let i=0; i < triangles.length; i++)
-            if (!(triangles[i] instanceof Triangle))
-                throw new Error('Not a triangle ^_^"');
-            else
-                triangles[i].linkToOutsideWorld(this);
-
-        if (!name) name = 'mesh'+this.id;
-    
-        this.name = name;
-        this.polys = triangles;
+        this.name = name ? name : 'mesh'+this.id;
     }
 
-    clone(likeAnInstance=true) {
-        let triangles = this.polys;
-        if (!likeAnInstance) {
-            triangles = new Array(this.polys.length);
-            for (let i=0; i < triangles.length; i++)
-                triangles[i] = this.polys[i].clone();
-        }
+    add(objects) {
+        if (!Array.isArray(objects))
+            throw new Error('This is not an array! >.<');
+        
+        for (let i=0; i < objects.length; i++)
+            if (!(objects[i] instanceof Triangle))
+                throw new Error('Not Triangle element found! ^^"');
+            else if (objects[i].parentLinked != null)
+                throw new Error('This triangle is already linked to '+objects[i].parentLinked+' >v<');
+            else {
+                for (let j=0; j < this.objects.length; j++)
+                    if (this.objects[j].id == objects[i].id)
+                        throw new Error(objects[i]+' is already in this mesh ovo');
+                        
+                objects[i].linkToOutsideWorld(this);
+                this.objects.push(objects[i]);
+            }
+    }
 
-        return new Mesh(triangles, this.name+'#', super.parentLinked);
+    remove(id) {
+        for (let i=0; i < this.objects.length; i++)
+            if (id == this.objects[i].id) {
+                this.objects[i].breakLink();
+                this.objects = this.objects.splice(i, 1);
+                return true
+            }
+        
+        return false;
+    }
+
+    clone() { // ONEDAY: likeAnInstance?
+        let objects = new Array(this.polys.length);
+        for (let i=0; i < objects.length; i++)
+            objects[i] = this.polys[i].clone();
+
+        return new Mesh(objects, this.name+'#', super.tr, super.parentLinked);
     }
 }

@@ -10,6 +10,8 @@ html, body {
     color: #444;
     line-height: 140%;
     letter-spacing: 1px;
+
+    --c: 2px;
 }
 
 input {
@@ -53,11 +55,11 @@ input[type="submit"] {
     flex-wrap: wrap;
     justify-content: start;
     align-items: flex-start;
-    width: calc(200px * 3);
+    width: calc(600px * 2);
 }
 
 .pixel {
     display: inline-block;
-    width: 3px;
-    height: 3px;
+    width: var(--c);
+    height: var(--c);
 }
