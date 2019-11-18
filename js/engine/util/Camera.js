@@ -124,7 +124,7 @@ class Camera extends Stageable {
                 ray.d = d;
 
                 // Ray creation per pixel
-                this.raster[j][i] = ray.getColor();
+                this.raster[this.raster.length-1-j][i] = ray.getColor();
             }
 
         return this.raster;
