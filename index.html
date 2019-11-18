@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-US">
-<head>
+  <head>
     <title>Ahorcado</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,500,700,900" rel="stylesheet" type="text/css">
-    <link href="css/normalize.css" rel="stylesheet" type="text/css">
-    <link href="css/main.css" rel="stylesheet" type="text/css">
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300,400,500,700,900"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
 
     <script src="js/engine/util/quantum/Utilities.js"></script>
     <script src="js/engine/util/quantum/Gauss.js"></script>
@@ -24,23 +28,13 @@
     <script src="js/engine/util/Light.js"></script>
     <script src="js/engine/util/Camera.js"></script>
     <script src="js/engine/Scene.js"></script>
-    
+
     <script src="js/main.js"></script>
-</head>
-<body>
-
-    <!-- <div class="row center">
-        <div class="col">
-
-            <label for="in">Say Something ^o^</label>
-            <input id="in" name="in" type="text" />
-            <input id="ok" name="ok" type="submit" />
-
-        </div>
-        <div class="col">
-            
-        </div>
-    </div> -->
-
-</body>
+  </head>
+  <body>
+    <div class="container">
+      <canvas id="canvas"></canvas>
+      <button id="render-start" class="button">Start render</button>
+    </div>
+  </body>
 </html>
