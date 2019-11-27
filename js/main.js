@@ -6,14 +6,7 @@ const pad = (n, width, z) => {
 
 // Marc's magic ^o^
 let scene = new Scene();
-let cam = new Camera(new CamSettings(2, 1, 600, 300));
-// cam.tr.matrix.me = [
-// 	[0.871214, 0, -0.490904, 0],
-// 	[-0.192902, 0.919559, -0.342346, 0],
-// 	[0.451415, 0.392953, 0.801132, 0],
-// 	[14.777467, 29.361945, 27.993464, 1]
-// ];
-// cam.tr.rotateZ(Math.PI);
+let cam = new Camera(new CamSettings(2, 1, 600/6, 300/6));
 let tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
 let tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
 let mesh = new Mesh();
@@ -21,7 +14,7 @@ mesh.add([tri0,tri1]);
 mesh.tr.translate(new Vector([-1,3,-1]));
 scene.add([cam, mesh]);
 cam.tr.translate(new Vector([0,0,0]));
-cam.tr.rotateX(Math.PI/8);
+// cam.tr.rotateX(Math.PI/8);
 
 let rendering = false;
 const renderFrame = () => {
@@ -43,8 +36,8 @@ const renderFrame = () => {
 	// Get canvas
 	const canvasElement = document.getElementById("canvas");
 	const canvas = canvasElement.getContext("2d");
-	canvasElement.width = cam.settings.rasterWidth;
-	canvasElement.height = cam.settings.rasterHeight;
+	// canvasElement.width = cam.settings.rasterWidth;
+	// canvasElement.height = cam.settings.rasterHeight;
 
 	// Render on canvas
 	let canvasDrawT1 = performance.now();
@@ -147,6 +140,40 @@ const loadObjFile = async event => {
 	renderFrame();
 };
 
+const controls = event => {
+	const key = event.key.toLowerCase();
+
+	if (key == 'w')
+		cam.tr.translate(new Vector([0,0.1,0]));
+	else if (key == 's')
+		cam.tr.translate(new Vector([0,-0.1,0]));
+	else if (key == 'd')
+		cam.tr.translate(new Vector([0.1,0,0]));
+	else if (key == 'a')
+		cam.tr.translate(new Vector([-0.1,0,0]));
+	else if (key == 'shift')
+		cam.tr.translate(new Vector([0,0,0.1]));
+	else if (key == 'alt')
+		cam.tr.translate(new Vector([0,0,-0.1]));
+
+	else if (key == 'arrowup')
+		cam.tr.rotateX(Math.PI/32);
+	else if (key == 'arrowdown')
+		cam.tr.rotateX(-Math.PI/32);
+	else if (key == 'arrowright')
+		cam.tr.rotateZ(Math.PI/32);
+	else if (key == 'arrowleft')
+		cam.tr.rotateZ(-Math.PI/32);
+	else if (key == '1' || key == 'end')
+		cam.tr.rotateY(Math.PI/32);
+	else if (key == '3' || key == 'pagedown')
+		cam.tr.rotateY(-Math.PI/32);
+	
+	else return;
+		
+	renderFrame();
+};
+
 document.addEventListener("DOMContentLoaded", () => {
 	document
 		.getElementById("render-start")
@@ -154,4 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	document
 		.getElementById("obj-import-file")
 		.addEventListener("change", loadObjFile);
+	document
+		.addEventListener("keydown", controls);
 });

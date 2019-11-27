@@ -28,12 +28,18 @@ class Transform {
         if (p.dim != 3)
             throw new Error("Format Exception -.-");
 
-        let arr = new Array(4);
-        arr[0] = p.me[0];
-        arr[1] = p.me[1];
-        arr[2] = p.me[2];
-        arr[3] = 1;
-        this.matrix.me[3] = arr;
+        this.matrix.me[3][0] += p.me[0];
+        this.matrix.me[3][1] += p.me[1];
+        this.matrix.me[3][2] += p.me[2];
+    }
+
+    translateFromOrigin(p) {
+        if (p.dim != 3)
+            throw new Error("Format Exception -.-");
+
+        this.matrix.me[3][0] = p.me[0];
+        this.matrix.me[3][1] = p.me[1];
+        this.matrix.me[3][2] = p.me[2];
     }
 
     rotateX(alpha) {
