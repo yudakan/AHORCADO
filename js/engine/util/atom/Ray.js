@@ -47,7 +47,7 @@ class Ray {
         const y1 = sol1[1];
         let t = sol1[2];
 
-        if (x1 < 0 || y1 < 0) return false; // in plane but not in triangle
+        if (x1 < 0 || y1 < 0 || x1 > 1 || y1 > 1) return false; // in plane but not in triangle
 
         // Ray and plane ba+bc intersection
         // r: p + t*d
