@@ -14,15 +14,14 @@ let cam = new Camera(new CamSettings(2, 1, 600, 300));
 // 	[14.777467, 29.361945, 27.993464, 1]
 // ];
 // cam.tr.rotateZ(Math.PI);
-let t0 = new Triangle([
-	new Vector([5, 1, 0]),
-	new Vector([0, 0, 0]),
-	new Vector([0, 1, 5])
-]);
+let tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
+let tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
 let mesh = new Mesh();
-mesh.add([t0]);
+mesh.add([tri0,tri1]);
+mesh.tr.translate(new Vector([-1,3,-1]));
 scene.add([cam, mesh]);
-mesh.tr.translate(new Vector([0, 10, 0]));
+cam.tr.translate(new Vector([0,0,0]));
+cam.tr.rotateX(Math.PI/8);
 
 let rendering = false;
 const renderFrame = () => {

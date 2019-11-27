@@ -99,7 +99,7 @@ class Camera extends Stageable {
         }
     }
 
-    getFrame() {
+    getFrame(type='raw') {
         if (this.ghost)
             throw new Error("I'm a fucking ghost! >3<");
 
@@ -124,7 +124,12 @@ class Camera extends Stageable {
                 ray.d = d;
 
                 // Ray creation per pixel
-                this.raster[this.raster.length-1-j][i] = ray.getColor().me;
+                let color = ray.getColor().me;
+                if (type == 'raw')
+                    this.raster[this.raster.length-1-j][i] = color;
+                else if (type == 'canvas') {
+                    // color
+                }
             }
 
         return this.raster;
