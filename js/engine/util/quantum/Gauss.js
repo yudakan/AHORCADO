@@ -16,7 +16,7 @@ class Gauss {
 
             // get the biggest main
             for (let j=d+1; j < system.length; j++)
-                if (system[dmax][d] < system[j][d])
+                if (Math.abs(system[dmax][d]) < Math.abs(system[j][d]))
                     dmax = j;
 
             // swap rows

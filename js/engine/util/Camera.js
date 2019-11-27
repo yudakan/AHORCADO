@@ -14,12 +14,12 @@ class Camera extends Stageable {
 
         this.settings = settings;
         this.name = name ? name : 'cam'+this.id;
-        this.raster = Utilities.create2Array(this.settings.rasterHeight, this.settings.rasterWidth, this.settings.bgColor);
+        this.raster = Utilities.create2Array(this.settings.rasterHeight, this.settings.rasterWidth, 0);
     }
 
     collect(collectable) { //private
         for (let i=0; i < collectable.objects.length; i++) {
-            let obj = collectable.objects[i];
+            const obj = collectable.objects[i];
 
             if (!obj.ghost)
                 if (obj instanceof Triangle) this.triangles.push(obj);
@@ -106,14 +106,14 @@ class Camera extends Stageable {
         this.mountContent();
         this.contentToMyWorld();
 
-        let xunit = this.settings.canvasWidth / this.settings.rasterWidth;
-        let zunit = this.settings.canvasHeight / this.settings.rasterHeight;
-        let xoffset = this.settings.canvasWidth / 2;
-        let zoffset = this.settings.canvasHeight / 2;
+        const xunit = this.settings.canvasWidth / this.settings.rasterWidth;
+        const zunit = this.settings.canvasHeight / this.settings.rasterHeight;
+        const xoffset = this.settings.canvasWidth / 2;
+        const zoffset = this.settings.canvasHeight / 2;
 
-        let p = new Vector([0, 0, 0]); // cam position
+        const p = new Vector([0, 0, 0]); // cam position
         let d = new Vector([0, 0, 0]); // Ray direction
-        let ray = new Ray(p, d, this); // Ray Template
+        const ray = new Ray(p, d, this); // Ray Template
 
         // Loop all raster
         for (let j=0; j < this.raster.length; j++)
@@ -124,7 +124,7 @@ class Camera extends Stageable {
                 ray.d = d;
 
                 // Ray creation per pixel
-                this.raster[this.raster.length-1-j][i] = ray.getColor();
+                this.raster[this.raster.length-1-j][i] = ray.getColor().me;
             }
 
         return this.raster;
