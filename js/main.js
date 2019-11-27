@@ -14,14 +14,23 @@ let cam = new Camera(new CamSettings(2, 1, 600, 300));
 // 	[14.777467, 29.361945, 27.993464, 1]
 // ];
 // cam.tr.rotateZ(Math.PI);
-let t0 = new Triangle([new Vector([5,1,0]), new Vector([0,0,0]), new Vector([0,1,5])]);
+let t0 = new Triangle([
+	new Vector([5, 1, 0]),
+	new Vector([0, 0, 0]),
+	new Vector([0, 1, 5])
+]);
 let mesh = new Mesh();
 mesh.add([t0]);
 scene.add([cam, mesh]);
-mesh.tr.translate(new Vector([0,10,0]));
+mesh.tr.translate(new Vector([0, 10, 0]));
 
 let rendering = false;
 const renderFrame = () => {
+	const drawPixel = (canvas, pixel, x, y, w, h) => {
+		canvas.fillStyle = `#${pad(new Number(pixel).toString(16), 6)}`;
+		canvas.fillRect(x, y, w, h);
+	};
+
 	// Prevent new renders if already rendering
 	if (rendering) throw new Error("Already rendering");
 	rendering = true;
@@ -40,11 +49,31 @@ const renderFrame = () => {
 
 	// Render on canvas
 	let canvasDrawT1 = performance.now();
-	for (let j = 0; j < frame.length; j++)
-		for (let i = 0; i < frame[0].length; i++) {
-			canvas.fillStyle = `#${pad(new Number(frame[j][i]).toString(16), 6)}`;
-			canvas.fillRect(i, j, 1, 1);
+	for (let j = 0; j < frame.length; j++) {
+		// If all the same, draw single line
+		if (frame[j].every(pixel => pixel === frame[j][0])) {
+			drawPixel(canvas, frame[j][0], 0, j, frame[j].length, 1);
+			continue;
 		}
+		// If not all the same, draw in batch
+		let prevPixelPos = 0;
+		let prevPixel = frame[j][0];
+
+		for (let i = 0; i < frame[0].length; i++) {
+			const pixel = frame[j][i];
+
+			// If pixel changed mid way throught render
+			if (pixel != prevPixel) {
+				drawPixel(canvas, prevPixel, prevPixelPos, j, i, 1);
+				prevPixel = pixel;
+				prevPixelPos = i;
+			}
+			// If reached the end
+			else if (i === frame[0].length - 1)
+				drawPixel(canvas, prevPixel, prevPixelPos, j, i, 1);
+		}
+	}
+
 	let canvasDrawT2 = performance.now();
 
 	console.log("Draw on canvas took " + (canvasDrawT2 - canvasDrawT1) + " milliseconds.");
