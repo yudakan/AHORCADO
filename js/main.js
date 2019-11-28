@@ -4,18 +4,26 @@ const pad = (n, width, z) => {
 	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 };
 
-// Marc's magic ^o^
-let scene = new Scene();
-let cam = new Camera(new CamSettings(2, 1, 600/6, 300/6));
-let tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
-let tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
-let mesh = new Mesh();
+
+/*====================================================
+ * Marc's magic ^o^
+ *====================================================*/
+const cam = new Camera(new CamSettings(2, 1, 600/6, 300/6));
+
+const tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
+const tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
+
+const mesh = new Mesh();
 mesh.add([tri0,tri1]);
 mesh.tr.translate(new Vector([-1,3,-1]));
-scene.add([cam, mesh]);
-cam.tr.translate(new Vector([0,0,0]));
-// cam.tr.rotateX(Math.PI/8);
 
+const scene = new Scene();
+scene.add([cam, mesh]);
+
+
+/*====================================================
+ * RENDER FUNCTION
+ *====================================================*/
 let rendering = false;
 const renderFrame = () => {
 	const drawPixel = (canvas, pixel, x, y, w, h) => {
@@ -74,6 +82,10 @@ const renderFrame = () => {
 	rendering = false;
 };
 
+
+/*====================================================
+ * UPLOAD FILE FUNCTION
+ *====================================================*/
 const readUploadedFileAsText = inputFile => {
 	const temporaryFileReader = new FileReader();
 
@@ -90,6 +102,10 @@ const readUploadedFileAsText = inputFile => {
 	});
 };
 
+
+/*====================================================
+ * LOAD OBJ FUNCTION
+ *====================================================*/
 const loadObjFile = async event => {
 	// Get input file
 	const input = event.target;
@@ -140,6 +156,10 @@ const loadObjFile = async event => {
 	renderFrame();
 };
 
+
+/*====================================================
+ * CONTROLS FUNCTION
+ *====================================================*/
 const controls = event => {
 	const key = event.key.toLowerCase();
 
@@ -174,6 +194,10 @@ const controls = event => {
 	renderFrame();
 };
 
+
+/*====================================================
+ * Listeners
+ *====================================================*/
 document.addEventListener("DOMContentLoaded", () => {
 	document
 		.getElementById("render-start")
