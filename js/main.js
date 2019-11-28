@@ -4,22 +4,20 @@ const pad = (n, width, z) => {
 	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 };
 
-
 /*====================================================
  * Marc's magic ^o^
  *====================================================*/
-const cam = new Camera(new CamSettings(2, 1, 600/6, 300/6));
+const cam = new Camera(new CamSettings(2, 1, 600 / 6, 300 / 6));
 
-const tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
-const tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
+const tri0 = new Triangle([new Vector([0, 0, 2]), new Vector([0, 0, 0]), new Vector([2, 0, 0])]);
+const tri1 = new Triangle([new Vector([0, 0, 2]), new Vector([2, 0, 2]), new Vector([2, 0, 0])]);
 
 const mesh = new Mesh();
-mesh.add([tri0,tri1]);
-mesh.tr.translate(new Vector([-1,3,-1]));
+mesh.add([tri0, tri1]);
+mesh.tr.translate(new Vector([-1, 3, -1]));
 
 const scene = new Scene();
 scene.add([cam, mesh]);
-
 
 /*====================================================
  * RENDER FUNCTION
@@ -64,13 +62,16 @@ const renderFrame = () => {
 
 			// If pixel changed mid way throught render
 			if (pixel != prevPixel) {
-				drawPixel(canvas, prevPixel, prevPixelPos, j, i, 1);
+				drawPixel(canvas, prevPixel, prevPixelPos, j, Math.min(i, i - prevPixelPos), 1);
 				prevPixel = pixel;
 				prevPixelPos = i;
 			}
 			// If reached the end
-			else if (i === frame[0].length - 1)
-				drawPixel(canvas, prevPixel, prevPixelPos, j, i, 1);
+			else if (i === frame[0].length - 1) {
+				{
+					drawPixel(canvas, prevPixel, prevPixelPos, j, i - prevPixelPos + 1, 1);
+				}
+			}
 		}
 	}
 
@@ -81,7 +82,6 @@ const renderFrame = () => {
 	// Allow new renders
 	rendering = false;
 };
-
 
 /*====================================================
  * UPLOAD FILE FUNCTION
@@ -101,7 +101,6 @@ const readUploadedFileAsText = inputFile => {
 		temporaryFileReader.readAsText(inputFile);
 	});
 };
-
 
 /*====================================================
  * LOAD OBJ FUNCTION
@@ -138,13 +137,7 @@ const loadObjFile = async event => {
 		}
 
 		if (type === "f") {
-			triangles.push(
-				new Triangle([
-					vectors[values[0] - 1].clone(),
-					vectors[values[1] - 1].clone(),
-					vectors[values[2] - 1].clone()
-				])
-			);
+			triangles.push(new Triangle([vectors[values[0] - 1].clone(), vectors[values[1] - 1].clone(), vectors[values[2] - 1].clone()]));
 			return;
 		}
 	});
@@ -156,55 +149,34 @@ const loadObjFile = async event => {
 	renderFrame();
 };
 
-
 /*====================================================
  * CONTROLS FUNCTION
  *====================================================*/
 const controls = event => {
 	const key = event.key.toLowerCase();
 
-	if (key == 'w')
-		cam.tr.translate(new Vector([0,0.1,0]));
-	else if (key == 's')
-		cam.tr.translate(new Vector([0,-0.1,0]));
-	else if (key == 'd')
-		cam.tr.translate(new Vector([0.1,0,0]));
-	else if (key == 'a')
-		cam.tr.translate(new Vector([-0.1,0,0]));
-	else if (key == 'shift')
-		cam.tr.translate(new Vector([0,0,0.1]));
-	else if (key == 'alt')
-		cam.tr.translate(new Vector([0,0,-0.1]));
-
-	else if (key == 'arrowup')
-		cam.tr.rotateX(Math.PI/32);
-	else if (key == 'arrowdown')
-		cam.tr.rotateX(-Math.PI/32);
-	else if (key == 'arrowright')
-		cam.tr.rotateZ(Math.PI/32);
-	else if (key == 'arrowleft')
-		cam.tr.rotateZ(-Math.PI/32);
-	else if (key == '1' || key == 'end')
-		cam.tr.rotateY(Math.PI/32);
-	else if (key == '3' || key == 'pagedown')
-		cam.tr.rotateY(-Math.PI/32);
-	
+	if (key == "w") cam.tr.translate(new Vector([0, 0.1, 0]));
+	else if (key == "s") cam.tr.translate(new Vector([0, -0.1, 0]));
+	else if (key == "d") cam.tr.translate(new Vector([0.1, 0, 0]));
+	else if (key == "a") cam.tr.translate(new Vector([-0.1, 0, 0]));
+	else if (key == "shift") cam.tr.translate(new Vector([0, 0, 0.1]));
+	else if (key == "alt") cam.tr.translate(new Vector([0, 0, -0.1]));
+	else if (key == "arrowup") cam.tr.rotateX(Math.PI / 32);
+	else if (key == "arrowdown") cam.tr.rotateX(-Math.PI / 32);
+	else if (key == "arrowright") cam.tr.rotateZ(Math.PI / 32);
+	else if (key == "arrowleft") cam.tr.rotateZ(-Math.PI / 32);
+	else if (key == "1" || key == "end") cam.tr.rotateY(Math.PI / 32);
+	else if (key == "3" || key == "pagedown") cam.tr.rotateY(-Math.PI / 32);
 	else return;
-		
+
 	renderFrame();
 };
-
 
 /*====================================================
  * Listeners
  *====================================================*/
 document.addEventListener("DOMContentLoaded", () => {
-	document
-		.getElementById("render-start")
-		.addEventListener("click", renderFrame);
-	document
-		.getElementById("obj-import-file")
-		.addEventListener("change", loadObjFile);
-	document
-		.addEventListener("keydown", controls);
+	document.getElementById("render-start").addEventListener("click", renderFrame);
+	document.getElementById("obj-import-file").addEventListener("change", loadObjFile);
+	document.addEventListener("keydown", controls);
 });
