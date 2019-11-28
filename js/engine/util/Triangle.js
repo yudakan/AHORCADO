@@ -28,6 +28,6 @@ class Triangle extends Stageable {
     }
 
     clone() {
-        return new Triangle(this.points, super.tr, super.parentLinked);
+        return new Triangle(this.points, this.tr, this.parentLinked);
     }
 }

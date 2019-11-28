@@ -84,7 +84,7 @@ class Ray {
         // Loop all triangles
         for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
         
-            const intersection = this.intersect( this.linkedCam.trianglesGears[i] );
+            const intersection = ray.intersect( this.linkedCam.trianglesGears[i] );
             return intersection && intersection.length() <= toLigth.length();
         }
     }
@@ -92,7 +92,7 @@ class Ray {
     getColor(mode='noLight') { // TODO: direct mode
         let yDepth = Ray.MAX_DEPTH;
         let firstTriangle;
-        let directLight;
+        let directLight = false;
 
         // Loop all triangles
         for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
@@ -100,13 +100,13 @@ class Ray {
             const intersection = this.intersect( this.linkedCam.trianglesGears[i] );
 
             if (intersection && intersection.me[1] < yDepth) {
-                directLight = this.traceToLigth(intersection);
+                if (mode == 'direct') directLight = this.traceToLigth(intersection);
                 yDepth = intersection.me[1];
                 firstTriangle = this.linkedCam.trianglesGears[i][3];
             }
         }
 
-        // Return color
+        // Return color        
         return firstTriangle ?
             directLight ?
                 firstTriangle.getColor().brightness(0.5)

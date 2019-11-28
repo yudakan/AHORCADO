@@ -41,11 +41,15 @@ class Mesh extends Stageable {
         return false;
     }
 
-    clone() { // ONEDAY: likeAnInstance?
-        let objects = new Array(this.polys.length);
-        for (let i=0; i < objects.length; i++)
-            objects[i] = this.polys[i].clone();
+    clone() { // TODO: likeAnInstance?
+        let objects = new Array(this.objects.length);
+        for (let i=0; i < objects.length; i++) {
+            objects[i] = this.objects[i].clone();
+            objects[i].breakLink();
+        }
 
-        return new Mesh(objects, this.name+'#', super.tr, super.parentLinked);
+        let newMesh = new Mesh(this.name+'#', this.tr, this.parentLinked);
+        newMesh.add(objects);
+        return newMesh;
     }
 }

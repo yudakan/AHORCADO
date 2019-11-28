@@ -5,17 +5,45 @@ const pad = (n, width, z) => {
 };
 
 // Marc's magic ^o^
-let scene = new Scene();
-let cam = new Camera(new CamSettings(2, 1, 600/6, 300/6));
-let tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
-let tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
-let mesh = new Mesh();
-mesh.add([tri0,tri1]);
-mesh.tr.translate(new Vector([-1,3,-1]));
-let light = new Light();
-light.tr.translate(new Vector([-10,-10,30]));
+const cam = new Camera(new CamSettings(2, 1, 600/6, 300/6));
 
-scene.add([cam, light]);
+const tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
+const tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
+
+// front
+const face0 = new Mesh();
+face0.add([tri0,tri1]);
+
+// right
+const face1 = face0.clone();
+face1.tr.rotateZ(Math.PI/2);
+
+// back
+const face2 = face0.clone();
+face2.tr.translateFromOrigin(new Vector([0,2,0]));
+
+// left
+const face3 = face1.clone();
+face3.tr.translateFromOrigin(new Vector([2,0,0]));
+
+// down
+const face4 = face0.clone();
+face4.tr.rotateX(-Math.PI/2);
+
+// up
+const face5 = face4.clone();
+face5.tr.translateFromOrigin(new Vector([0,0,2]));
+
+// Construct box
+const box = new Null();
+box.add([face0,face1,face2,face3,face4,face5]);
+box.tr.translateFromOrigin(new Vector([-1,3,-1]));
+
+const light = new Light();
+light.tr.translate(new Vector([1,1,10]));
+
+const scene = new Scene();
+scene.add([cam, light, box]);
 
 let rendering = false;
 const renderFrame = () => {

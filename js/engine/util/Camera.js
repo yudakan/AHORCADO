@@ -124,7 +124,7 @@ class Camera extends Stageable {
                 ray.d = d;
 
                 // Ray creation per pixel
-                const color = ray.getColor().me;
+                const color = ray.getColor('direct').me;
                 if (type == 'raw')
                     this.raster[this.raster.length-1-j][i] = color;
                 else if (type == 'canvas') {
