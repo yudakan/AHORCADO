@@ -76,18 +76,18 @@ class Camera extends Stageable {
         }
 
         this.lightsGiars = [];
-        for (let i=0; i < this.lightsGiars.length; i++) {
+        for (let i=0; i < this.lights.length; i++) {
 
             // Go down to max outside, global world
-            let trMatrix1 = this.lightsGiars[i].tr.matrix;
-            let step =  this.lightsGiars[i].parentLinked;
+            let trMatrix1 = this.lights[i].tr.matrix;
+            let step =  this.lights[i].parentLinked;
             while (!(step instanceof Scene)) {
                 trMatrix1 = step.tr.myWorldToOutside(trMatrix1);
                 step = step.parentLinked;
             }
 
             // Go up to cam world (reversed)
-            trMatrix2 = this.tr.matrix;
+            let trMatrix2 = this.tr.matrix;
             step = this.parentLinked;
             while (!(step instanceof Scene)) {
                 trMatrix2 = step.tr.outsideToMyWorld(trMatrix2);
@@ -95,15 +95,15 @@ class Camera extends Stageable {
             }
 
             // Push triangle to array
-            this.lightsGiarsGears.push( [trMatrix2.multiply(trMatrix1.inverse()), this.lightsGiars[i]] );
+            this.lightsGiars.push( [trMatrix2.multiply(trMatrix1.inverse()), this.lights[i]] );
         }
     }
 
-    getFrame(type='raw') {
+    getFrame(type='raw', mode='ini') { // TODO: other mode
         if (this.ghost)
             throw new Error("I'm a fucking ghost! >3<");
 
-        this.mountContent();
+        if (mode == 'ini') this.mountContent();
         this.contentToMyWorld();
 
         const xunit = this.settings.canvasWidth / this.settings.rasterWidth;
@@ -124,11 +124,11 @@ class Camera extends Stageable {
                 ray.d = d;
 
                 // Ray creation per pixel
-                let color = ray.getColor().me;
+                const color = ray.getColor().me;
                 if (type == 'raw')
                     this.raster[this.raster.length-1-j][i] = color;
                 else if (type == 'canvas') {
-                    // color
+                    // TODO: other type
                 }
             }
 

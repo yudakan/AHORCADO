@@ -39,14 +39,20 @@ class Color {
         return this.me & 0xFF;
     }
 
-    setR(val) {
-        return new Color((val & 0xFF) << 16) | (this.me & 0xFFFF);
-    }
-    setG(val) {
-        return new Color((val & 0xFF) << 8) | (this.me & 0xFF00FF);
-    }
-    setB(val) {
-        return new Color(val & 0xFF) | (this.me & 0xFFFF00);
+    // TODO: this is wrong!
+    // setR(val) {
+    //     return new Color((val & 0xFF) << 16) | (this.me & 0xFFFF);
+    // }
+    // setG(val) {
+    //     return new Color((val & 0xFF) << 8) | (this.me & 0xFF00FF);
+    // }
+    // setB(val) {
+    //     return new Color(val & 0xFF) | (this.me & 0xFFFF00);
+    // }
+
+    // TODO: methods -> color brightness/intensity
+    brightness(val) {
+        return Color.SILVER;
     }
 
     clone() {

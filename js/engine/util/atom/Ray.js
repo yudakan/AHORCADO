@@ -21,6 +21,7 @@ class Ray {
         if (!(triangleGear[3] instanceof Triangle))
             throw new Error("What the fuck? @_@");
 
+        // Vertices of the triangle
         const a = triangleGear[0];
         const b = triangleGear[1];
         const c = triangleGear[2];
@@ -73,9 +74,25 @@ class Ray {
         return this.p.add( this.d.scale(t) );
     }
 
-    getColor() {
+    traceToLigth(point) { // TODO: more lights & improve
+        if (!(point instanceof Vector))
+            throw new Error("What the fuck? #_#");
+
+        const toLigth = new Vector( this.linkedCam.lightsGiars[0][0].me[3].slice(0,3) ).sub( point );
+        const ray = new Ray(point, toLigth, this.linkedCam);
+
+        // Loop all triangles
+        for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
+        
+            const intersection = this.intersect( this.linkedCam.trianglesGears[i] );
+            return intersection && intersection.length() <= toLigth.length();
+        }
+    }
+
+    getColor(mode='noLight') { // TODO: direct mode
         let yDepth = Ray.MAX_DEPTH;
         let firstTriangle;
+        let directLight;
 
         // Loop all triangles
         for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
@@ -83,12 +100,19 @@ class Ray {
             const intersection = this.intersect( this.linkedCam.trianglesGears[i] );
 
             if (intersection && intersection.me[1] < yDepth) {
+                directLight = this.traceToLigth(intersection);
                 yDepth = intersection.me[1];
                 firstTriangle = this.linkedCam.trianglesGears[i][3];
             }
         }
 
         // Return color
-        return firstTriangle ? firstTriangle.getColor() : this.linkedCam.settings.bgColor;
+        return firstTriangle ?
+            directLight ?
+                firstTriangle.getColor().brightness(0.5)
+                :
+                firstTriangle.getColor()
+            :
+            this.linkedCam.settings.bgColor;
     }
 }
