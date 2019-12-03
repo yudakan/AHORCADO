@@ -52,7 +52,18 @@ class Color {
 
     // TODO: methods -> color brightness/intensity
     brightness(val) {
-        return Color.SILVER;
+        if (val > 1 || val < 0)
+            throw new Error('Value must be between 0 & 1 o_O');
+        
+        let R = this.getR() * val;
+        let G = this.getG() * val;
+        let B = this.getB() * val;
+    
+        R = R<255 ? R : 255;  
+        G = G<255 ? G : 255;  
+        B = B<255 ? B : 255;  
+
+        return new Color(R << 16 | G << 8 | B);
     }
 
     clone() {

@@ -6,6 +6,12 @@ const pad = (n, width, z) => {
 
 // Marc's magic ^o^
 const cam = new Camera(new CamSettings(2, 1, 600/6, 300/6));
+cam.tr.matrix.me = [
+	[0.7071067811865476, -0.7071067811865475, 0, 0],
+	[0.5879378012096799, 0.58793780120968, -0.5555702330196028, 0],
+	[0.39284747919355145, 0.3928474791935515, 0.8314696123025461, 0],
+	[-2.3000000000000007, 1.6000000000000003, 2.100000000000001, 1]
+];
 
 const tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
 const tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
@@ -39,11 +45,15 @@ const box = new Null();
 box.add([face0,face1,face2,face3,face4,face5]);
 box.tr.translateFromOrigin(new Vector([-1,3,-1]));
 
+// box 2
+const box2 = box.clone();
+box2.tr.translateFromOrigin(new Vector([1,3,-1]));
+
 const light = new Light();
-light.tr.translate(new Vector([1,1,10]));
+light.tr.translateFromOrigin(new Vector([-1.5,4,0]));
 
 const scene = new Scene();
-scene.add([cam, light, box]);
+scene.add([cam, light, box, box2]);
 
 let rendering = false;
 const renderFrame = () => {

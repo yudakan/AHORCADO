@@ -74,25 +74,32 @@ class Ray {
         return this.p.add( this.d.scale(t) );
     }
 
-    traceToLigth(point) { // TODO: more lights & improve
+    traceToLigth(point, ii) { // TODO: more lights & improve
         if (!(point instanceof Vector))
             throw new Error("What the fuck? #_#");
 
         const toLigth = new Vector( this.linkedCam.lightsGiars[0][0].me[3].slice(0,3) ).sub( point );
         const ray = new Ray(point, toLigth, this.linkedCam);
+        let visible = toLigth.length();
 
         // Loop all triangles
         for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
+            if (ii == i) continue;
         
             const intersection = ray.intersect( this.linkedCam.trianglesGears[i] );
-            return intersection && intersection.length() <= toLigth.length();
+            if (intersection && intersection.length() < visible) {
+                visible = false;
+                break;
+            }
         }
+        
+        return visible;
     }
 
     getColor(mode='noLight') { // TODO: direct mode
         let yDepth = Ray.MAX_DEPTH;
         let firstTriangle;
-        let directLight = false;
+        let directLight = false; // TODO: noLight mode always dark
 
         // Loop all triangles
         for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
@@ -100,18 +107,18 @@ class Ray {
             const intersection = this.intersect( this.linkedCam.trianglesGears[i] );
 
             if (intersection && intersection.me[1] < yDepth) {
-                if (mode == 'direct') directLight = this.traceToLigth(intersection);
                 yDepth = intersection.me[1];
                 firstTriangle = this.linkedCam.trianglesGears[i][3];
+                if (mode == 'direct') directLight = this.traceToLigth(intersection, i); // TODO: edit performance if string
             }
         }
 
         // Return color        
         return firstTriangle ?
             directLight ?
-                firstTriangle.getColor().brightness(0.5)
+                firstTriangle.getColor().brightness( 1 - directLight/10 )
                 :
-                firstTriangle.getColor()
+                firstTriangle.getColor().brightness( 0.1 )
             :
             this.linkedCam.settings.bgColor;
     }

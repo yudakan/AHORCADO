@@ -36,7 +36,7 @@ class Camera extends Stageable {
                 throw new Error("I'm not in scene :'c");
             scene = scene.parentLinked;
         }
-
+        
         // Look for all no-ghost triangles & lights on the scene
         this.triangles = [];
         this.lights = [];
@@ -95,7 +95,7 @@ class Camera extends Stageable {
             }
 
             // Push triangle to array
-            this.lightsGiars.push( [trMatrix2.multiply(trMatrix1.inverse()), this.lights[i]] );
+            this.lightsGiars.push( [trMatrix1.multiply(trMatrix2.inverse()), this.lights[i]] );
         }
     }
 
