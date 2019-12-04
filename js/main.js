@@ -5,7 +5,7 @@ const pad = (n, width, z) => {
 };
 
 // Marc's magic ^o^
-const cam = new Camera(new CamSettings(2, 1, 600/6, 300/6));
+const cam = new Camera(new CamSettings(2, 1, 600/2, 300/2));
 cam.tr.matrix.me = [
 	[0.7071067811865476, -0.7071067811865475, 0, 0],
 	[0.5879378012096799, 0.58793780120968, -0.5555702330196028, 0],
@@ -49,8 +49,9 @@ box.tr.translateFromOrigin(new Vector([-1,3,-1]));
 const box2 = box.clone();
 box2.tr.translateFromOrigin(new Vector([1,3,-1]));
 
+// light
 const light = new Light();
-light.tr.translateFromOrigin(new Vector([-1.5,4,0]));
+light.tr.translateFromOrigin(new Vector([-1.5,4,2]));
 
 const scene = new Scene();
 scene.add([cam, light, box, box2]);

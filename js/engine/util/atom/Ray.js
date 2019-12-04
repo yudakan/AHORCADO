@@ -26,10 +26,6 @@ class Ray {
         const b = triangleGear[1];
         const c = triangleGear[2];
 
-        // Back camera?
-        if (a.me[1] < 1 || b.me[1] < 1 || c.me[1] < 1) // TODO: Large triangles?
-            return false;
-
         // Ray and plane ab+ac intersection
         // r: p + t*d
         // π: a + x*ab + y*ac
@@ -83,11 +79,13 @@ class Ray {
         let visible = toLigth.length();
 
         // Loop all triangles
-        for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
+        for (let i=0; i < ray.linkedCam.trianglesGears.length; i++) {
             if (ii == i) continue;
         
-            const intersection = ray.intersect( this.linkedCam.trianglesGears[i] );
-            if (intersection && intersection.length() < visible) {
+            const intersection = ray.intersect( ray.linkedCam.trianglesGears[i] );
+
+            // is there an intersection and is this one in front of the triangle (between point and light)?
+            if ( intersection && toLigth.dot(intersection.sub(point)) > 0 ) {
                 visible = false;
                 break;
             }
@@ -106,7 +104,7 @@ class Ray {
                 
             const intersection = this.intersect( this.linkedCam.trianglesGears[i] );
 
-            if (intersection && intersection.me[1] < yDepth) {
+            if ( intersection && intersection.me[1] < yDepth && this.d.dot(intersection) > 0 ) {
                 yDepth = intersection.me[1];
                 firstTriangle = this.linkedCam.trianglesGears[i][3];
                 if (mode == 'direct') directLight = this.traceToLigth(intersection, i); // TODO: edit performance if string
@@ -115,11 +113,13 @@ class Ray {
 
         // Return color        
         return firstTriangle ?
-            directLight ?
-                firstTriangle.getColor().brightness( 1 - directLight/10 )
+                    directLight ?
+                        firstTriangle.getColor().brightness(
+                            ( 1-Math.pow( Math.E, -1/Math.sqrt(directLight-1) ) ) /
+                            ( 1+Math.pow( Math.E, -1/Math.sqrt(directLight-1) ) ) )
+                    :
+                        firstTriangle.getColor().brightness( 0.1 )
                 :
-                firstTriangle.getColor().brightness( 0.1 )
-            :
-            this.linkedCam.settings.bgColor;
+                this.linkedCam.settings.bgColor;
     }
 }
