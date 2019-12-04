@@ -11,6 +11,8 @@ class Mesh extends Stageable {
         this.name = name ? name : 'mesh'+this.id;
     }
 
+    // TODO: scale & rotate methods
+
     add(objects) {
         if (!Array.isArray(objects))
             throw new Error('This is not an array! >.<');
