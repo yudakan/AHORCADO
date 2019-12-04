@@ -1,6 +1,7 @@
 class Vector {
 
     // Attributes
+    static ZERO3 = new Vector([0, 0, 0]);
     dim; me;
 
     constructor(arr) {
@@ -126,6 +127,17 @@ class Vector {
             normalized.me[i] /= len;
 
         return normalized;
+    }
+
+    equals(v, decimals=1000) {
+        if (this.dim != v.dim)
+            throw new Error("Not same dimension u.u");
+
+        for (let i=0; i < this.dim; i++)
+            if (Math.round(this.me[i] * decimals) != Math.round(v.me[i] * decimals))
+                return false;
+
+        return true;
     }
 
     clone() {

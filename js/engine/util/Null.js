@@ -40,4 +40,16 @@ class Null extends Stageable {
         
         return false;
     }
+
+    clone() { // TODO: likeAnInstance?
+        let objects = new Array(this.objects.length);
+        for (let i=0; i < objects.length; i++) {
+            objects[i] = this.objects[i].clone();
+            objects[i].breakLink();
+        }
+
+        let newNUll = new Null(this.name+'#', this.tr, this.parentLinked);
+        newNUll.add(objects);
+        return newNUll;
+    }
 }

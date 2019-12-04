@@ -21,13 +21,10 @@ class Ray {
         if (!(triangleGear[3] instanceof Triangle))
             throw new Error("What the fuck? @_@");
 
+        // Vertices of the triangle
         const a = triangleGear[0];
         const b = triangleGear[1];
         const c = triangleGear[2];
-
-        // Back camera?
-        if (a.me[1] < 1 || b.me[1] < 1 || c.me[1] < 1) // TODO: Large triangles?
-            return false;
 
         // Ray and plane ab+ac intersection
         // r: p + t*d
@@ -73,22 +70,56 @@ class Ray {
         return this.p.add( this.d.scale(t) );
     }
 
-    getColor() {
+    traceToLigth(point, ii) { // TODO: more lights & improve
+        if (!(point instanceof Vector))
+            throw new Error("What the fuck? #_#");
+
+        const toLigth = new Vector( this.linkedCam.lightsGiars[0][0].me[3].slice(0,3) ).sub( point );
+        const ray = new Ray(point, toLigth, this.linkedCam);
+        let visible = toLigth.length();
+
+        // Loop all triangles
+        for (let i=0; i < ray.linkedCam.trianglesGears.length; i++) {
+            if (ii == i) continue;
+        
+            const intersection = ray.intersect( ray.linkedCam.trianglesGears[i] );
+
+            // is there an intersection and is this one in front of the triangle (between point and light)?
+            if ( intersection && toLigth.dot(intersection.sub(point)) > 0 ) {
+                visible = false;
+                break;
+            }
+        }
+        
+        return visible;
+    }
+
+    getColor(mode='noLight') { // TODO: direct mode
         let yDepth = Ray.MAX_DEPTH;
         let firstTriangle;
+        let directLight = false; // TODO: noLight mode always dark
 
         // Loop all triangles
         for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
                 
             const intersection = this.intersect( this.linkedCam.trianglesGears[i] );
 
-            if (intersection && intersection.me[1] < yDepth) {
+            if ( intersection && intersection.me[1] < yDepth && this.d.dot(intersection) > 0 ) {
                 yDepth = intersection.me[1];
                 firstTriangle = this.linkedCam.trianglesGears[i][3];
+                if (mode == 'direct') directLight = this.traceToLigth(intersection, i); // TODO: edit performance if string
             }
         }
 
-        // Return color
-        return firstTriangle ? firstTriangle.getColor() : this.linkedCam.settings.bgColor;
+        // Return color        
+        return firstTriangle ?
+                    directLight ?
+                        firstTriangle.getColor().brightness(
+                            ( 1-Math.pow( Math.E, -1/Math.sqrt(directLight-1) ) ) /
+                            ( 1+Math.pow( Math.E, -1/Math.sqrt(directLight-1) ) ) )
+                    :
+                        firstTriangle.getColor().brightness( 0.1 )
+                :
+                this.linkedCam.settings.bgColor;
     }
 }
