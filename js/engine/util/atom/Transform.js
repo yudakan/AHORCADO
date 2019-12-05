@@ -24,6 +24,10 @@ class Transform {
         this.matrix = mx.clone();
     }
 
+    getPosition() {
+        return new Vector(this.matrix.me[3].slice(0, 3));
+    }
+
     translate(p) {
         if (p.dim != 3)
             throw new Error("Format Exception -.-");

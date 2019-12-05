@@ -34,7 +34,7 @@ class Null extends Stageable {
         for (let i=0; i < this.objects.length; i++)
             if (id == this.objects[i].id) {
                 this.objects[i].breakLink();
-                this.objects = this.objects.splice(i, 1);
+                this.objects.splice(i, 1);
                 return true
             }
         
