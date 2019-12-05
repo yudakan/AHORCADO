@@ -1,6 +1,7 @@
 class Light extends Stageable {
 
     // Attributes
+    // TODO: color is always white in Ray implementation
     name; color;
 
     constructor(color=Color.WHITE, name='', transform, parentLinked) {
@@ -18,6 +19,13 @@ class Light extends Stageable {
 
     getColor() {
         return this.color;
+    }
+
+    setColor(color) {
+        if (!(color instanceof Color))
+            throw new Error('Color needed! >.<');
+
+        this.color = color;
     }
 
     clone() {

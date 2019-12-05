@@ -13,6 +13,14 @@ class Mesh extends Stageable {
 
     // TODO: scale & rotate methods
 
+    setColor(color) {
+        if (!(color instanceof Color))
+            throw new Error('Color needed! >.<');
+
+        for (let i=0; i < this.objects.length; i++)
+            this.objects[i].setColor(color);
+    }
+
     add(objects) {
         if (!Array.isArray(objects))
             throw new Error('This is not an array! >.<');

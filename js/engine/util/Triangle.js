@@ -31,6 +31,13 @@ class Triangle extends Stageable {
         return this.color;
     }
 
+    setColor(color) {
+        if (!(color instanceof Color))
+            throw new Error('Color needed! >.<');
+
+        this.color = color;
+    }
+
     clone() {
         return new Triangle(this.points, this.color, this.tr, this.parentLinked);
     }

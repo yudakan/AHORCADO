@@ -8,8 +8,8 @@ const pad = (n, width, z) => {
  * Marc's magic ^o^
  *====================================================*/
 // triangles for cube
-const tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
-const tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
+const tri0 = new Triangle([new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0])], Color.AQUA );
+const tri1 = new Triangle([new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0])], Color.AQUA );
 
 // front
 const face0 = new Mesh();
@@ -42,11 +42,12 @@ cube1.tr.translateFromOrigin(new Vector([-1,3,-1]));
 
 // Construct cube2
 const cube2 = cube1.clone();
+cube2.objects.forEach(m => m.setColor(Color.FUCHSIA));
 cube2.tr.translateFromOrigin(new Vector([-2,2,-2]));
 
 // plane ground
-const tri2 = new Triangle([ new Vector([0,5,0]), new Vector([0,0,0]), new Vector([5,0,0]) ]);
-const tri3 = new Triangle([ new Vector([0,5,0]), new Vector([5,5,0]), new Vector([5,0,0]) ]);
+const tri2 = new Triangle([new Vector([0,5,0]), new Vector([0,0,0]), new Vector([5,0,0])], Color.LIME);
+const tri3 = new Triangle([new Vector([0,5,0]), new Vector([5,5,0]), new Vector([5,0,0])], Color.LIME);
 const ground = new Mesh();
 ground.add([tri2,tri3]);
 ground.tr.translateFromOrigin(new Vector([-2.5,1.5,-1.5]));
