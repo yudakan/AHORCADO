@@ -11,8 +11,6 @@ class Light extends Stageable {
             throw new Error('Color needed! >.<');
         if (typeof name !== 'string')
             throw new Error('Not a string ¬3¬');
-    
-
 
         this.color = color;
         this.name = name ? name : 'light'+this.id;
@@ -20,5 +18,9 @@ class Light extends Stageable {
 
     getColor() {
         return this.color;
+    }
+
+    clone() {
+        return new Light(this.color, this.name+'#', this.tr, this.parentLinked);
     }
 }

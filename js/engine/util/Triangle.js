@@ -1,9 +1,9 @@
 class Triangle extends Stageable {
 
     // Attributes
-    points;
+    points; color;
 
-    constructor(points, transform, parentLinked) {
+    constructor(points, color=Color.WHITE, transform, parentLinked) {
         super(transform, parentLinked);
 
         // Filter
@@ -20,14 +20,18 @@ class Triangle extends Stageable {
         }
         else
             this.points = [new Vector([1,0,0]), new Vector([0,1,0]), new Vector([0,0,1])];
+
+        if (!(color instanceof Color))
+            throw new Error('Color needed! >.<');
+
+        this.color = color;
     }
 
-    // TODO: !!!
     getColor() {
-        return Color.WHITE;
+        return this.color;
     }
 
     clone() {
-        return new Triangle(this.points, this.tr, this.parentLinked);
+        return new Triangle(this.points, this.color, this.tr, this.parentLinked);
     }
 }

@@ -1,6 +1,7 @@
 class Ray {
 
     // Attributes
+    // TODO: MAX_RECURSIVITY
     static MAX_DEPTH = 1000;
     p; d; linkedCam;
 
@@ -17,14 +18,14 @@ class Ray {
         this.linkedCam = linkedCam;
     }
 
-    intersect(triangleGear) {
-        if (!(triangleGear[3] instanceof Triangle))
+    intersect(triangle) {
+        if (!(triangle instanceof Triangle))
             throw new Error("What the fuck? @_@");
 
         // Vertices of the triangle
-        const a = triangleGear[0];
-        const b = triangleGear[1];
-        const c = triangleGear[2];
+        const a = triangle.points[0];
+        const b = triangle.points[1];
+        const c = triangle.points[2];
 
         // Ray and plane ab+ac intersection
         // r: p + t*d
@@ -70,56 +71,61 @@ class Ray {
         return this.p.add( this.d.scale(t) );
     }
 
-    traceToLigth(point, ii) { // TODO: more lights & improve
+    traceToLigth(point, exceptTriangle) { // TODO: more lights & improve
         if (!(point instanceof Vector))
             throw new Error("What the fuck? #_#");
 
-        const toLigth = new Vector( this.linkedCam.lightsGiars[0][0].me[3].slice(0,3) ).sub( point );
+        const toLigth = this.linkedCam.lightsInMyWorld[0].tr.getPosition().sub( point );
         const ray = new Ray(point, toLigth, this.linkedCam);
-        let visible = toLigth.length();
 
         // Loop all triangles
-        for (let i=0; i < ray.linkedCam.trianglesGears.length; i++) {
-            if (ii == i) continue;
+        for (let i=0; i < ray.linkedCam.trianglesInMyWorld.length; i++) {
+            if (exceptTriangle.id == ray.linkedCam.trianglesInMyWorld[i].id)
+                continue;
         
-            const intersection = ray.intersect( ray.linkedCam.trianglesGears[i] );
+            const intersection = ray.intersect( ray.linkedCam.trianglesInMyWorld[i] );
 
-            // is there an intersection and is this one in front of the triangle (between point and light)?
-            if ( intersection && toLigth.dot(intersection.sub(point)) > 0 ) {
-                visible = false;
-                break;
-            }
+            // is there an intersection?
+            // is this one between point and light?
+            if ( intersection && toLigth.dot(intersection.sub(point)) > 0 )
+                return null; // so no direct light here :/
         }
         
-        return visible;
+        return toLigth;
     }
 
-    getColor(mode='noLight') { // TODO: direct mode
+    // TODO: direct mode
+    // TODO: we need no camera dependency
+    getColor(mode='noLight') {
         let yDepth = Ray.MAX_DEPTH;
-        let firstTriangle;
-        let directLight = false; // TODO: noLight mode always dark
+        let closerTriangle = false;
+        let directLightVect = mode == 'direct';
 
         // Loop all triangles
-        for (let i=0; i < this.linkedCam.trianglesGears.length; i++) {
+        for (let i=0; i < this.linkedCam.trianglesInMyWorld.length; i++) {
                 
-            const intersection = this.intersect( this.linkedCam.trianglesGears[i] );
+            const intersection = this.intersect( this.linkedCam.trianglesInMyWorld[i] );
 
+            // is there an intersection?
+            // is this one closer than previous triangles?
+            // not behind camera?
             if ( intersection && intersection.me[1] < yDepth && this.d.dot(intersection) > 0 ) {
                 yDepth = intersection.me[1];
-                firstTriangle = this.linkedCam.trianglesGears[i][3];
-                if (mode == 'direct') directLight = this.traceToLigth(intersection, i); // TODO: edit performance if string
+                closerTriangle = this.linkedCam.trianglesInMyWorld[i];
+                if (directLightVect !== false) directLightVect = this.traceToLigth(intersection, closerTriangle);
             }
         }
 
-        // Return color        
-        return firstTriangle ?
-                    directLight ?
-                        firstTriangle.getColor().brightness(
-                            ( 1-Math.pow( Math.E, -1/Math.sqrt(directLight-1) ) ) /
-                            ( 1+Math.pow( Math.E, -1/Math.sqrt(directLight-1) ) ) )
-                    :
-                        firstTriangle.getColor().brightness( 0.1 )
-                :
-                this.linkedCam.settings.bgColor;
+        // Return color   
+        if (closerTriangle) {
+            if (directLightVect === false) return closerTriangle.getColor();
+            else if (directLightVect === null) return closerTriangle.getColor().brightness( 0.1 );
+            else {
+                const distance = directLightVect.length();
+                const intensity = 1 / Math.sqrt(distance < 1 ? 1 : distance);
+                return closerTriangle.getColor().brightness( intensity );
+            }
+        }
+        else return this.linkedCam.settings.bgColor;
     }
 }

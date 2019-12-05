@@ -7,14 +7,7 @@ const pad = (n, width, z) => {
 /*====================================================
  * Marc's magic ^o^
  *====================================================*/
-const cam = new Camera(new CamSettings(2, 1, 600/2, 300/2));
-cam.tr.matrix.me = [
-	[0.7071067811865476, -0.7071067811865475, 0, 0],
-	[0.5879378012096799, 0.58793780120968, -0.555570233019603, 0],
-	[0.3928474791935515, 0.39284747919355156, 0.8314696123025461, 0],
-	[-3.0000000000000013, 0.7, 2.100000000000001, 1]
-];
-
+// triangles for cube
 const tri0 = new Triangle([ new Vector([0,0,2]), new Vector([0,0,0]), new Vector([2,0,0]) ]);
 const tri1 = new Triangle([ new Vector([0,0,2]), new Vector([2,0,2]), new Vector([2,0,0]) ]);
 
@@ -42,14 +35,14 @@ face4.tr.rotateX(-Math.PI/2);
 const face5 = face4.clone();
 face5.tr.translateFromOrigin(new Vector([0,0,2]));
 
-// Construct bigBox
-const bigBox = new Null();
-bigBox.add([face0,face1,face2,face3,face4,face5]);
-bigBox.tr.translateFromOrigin(new Vector([-1,3,-1]));
+// Construct cube1
+const cube1 = new Null();
+cube1.add([face0,face1,face2,face3,face4,face5]);
+cube1.tr.translateFromOrigin(new Vector([-1,3,-1]));
 
-// Construct smallBox
-const smallBox = bigBox.clone();
-bigBox.tr.translateFromOrigin(new Vector([-2,2,-2]));
+// Construct cube2
+const cube2 = cube1.clone();
+cube2.tr.translateFromOrigin(new Vector([-2,2,-2]));
 
 // plane ground
 const tri2 = new Triangle([ new Vector([0,5,0]), new Vector([0,0,0]), new Vector([5,0,0]) ]);
@@ -62,9 +55,18 @@ ground.tr.translateFromOrigin(new Vector([-2.5,1.5,-1.5]));
 const light = new Light();
 light.tr.translateFromOrigin(new Vector([-1.5,4,2]));
 
+// camera
+const cam = new Camera(new CamSettings(2, 1, 600/2, 300/2));
+cam.tr.matrix.me = [
+	[0.7071067811865476, -0.7071067811865475, 0, 0],
+	[0.5879378012096799, 0.58793780120968, -0.555570233019603, 0],
+	[0.3928474791935515, 0.39284747919355156, 0.8314696123025461, 0],
+	[-3.0000000000000013, 0.7, 2.100000000000001, 1]
+];
+
 // scene
 const scene = new Scene();
-scene.add([cam, light, bigBox, smallBox, ground]);
+scene.add([cam, light, cube1, cube2, ground]);
 
 /*====================================================
  * RENDER FUNCTION

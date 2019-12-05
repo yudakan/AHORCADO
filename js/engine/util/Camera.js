@@ -2,7 +2,7 @@ class Camera extends Stageable {
 
     // Attributes
     name; settings; raster;
-    triangles; lights; trianglesGears; lightsGiars;
+    triangles; lights; trianglesInMyWorld; lightsInMyWorld;
 
     constructor(settings=new CamSettings(), name='', transform, parentLinked) {
         super(transform, parentLinked);
@@ -44,7 +44,7 @@ class Camera extends Stageable {
     }
 
     contentToMyWorld() { //private
-        this.trianglesGears = [];
+        this.trianglesInMyWorld = [];
         for (let i=0; i < this.triangles.length; i++) {
 
             // Go down to max outside, global world
@@ -72,10 +72,14 @@ class Camera extends Stageable {
             c = c.multiply(trMatrix.inverse()).slice(0,3);
 
             // Push triangle to array
-            this.trianglesGears.push( [a, b, c, this.triangles[i]] );
+            const myTriangle = this.triangles[i].clone();
+            myTriangle.points = [a, b, c];
+            myTriangle.tr = new Transform();
+            myTriangle.parentLinked = this;
+            this.trianglesInMyWorld.push( myTriangle );
         }
 
-        this.lightsGiars = [];
+        this.lightsInMyWorld = [];
         for (let i=0; i < this.lights.length; i++) {
 
             // Go down to max outside, global world
@@ -95,7 +99,10 @@ class Camera extends Stageable {
             }
 
             // Push triangle to array
-            this.lightsGiars.push( [trMatrix1.multiply(trMatrix2.inverse()), this.lights[i]] );
+            const myLight = this.lights[i].clone();
+            myLight.tr.matrix = trMatrix1.multiply(trMatrix2.inverse());
+            myLight.parentLinked = this;
+            this.lightsInMyWorld.push( myLight );
         }
     }
 
