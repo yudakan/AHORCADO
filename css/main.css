@@ -1,82 +1,117 @@
-html,
-body {
-	width: 100vw;
-	height: 100vh;
-	margin: 0;
-	padding: 0;
-	background-color: #e2dbd3;
-	font-size: 13px;
-	font-family: lato, sans-serif;
-	font-weight: 400;
-	color: #444;
-	line-height: 140%;
-	letter-spacing: 1px;
-	--c: 2px;
+html, body {
+    /* Vars o3o */
+    --color_a: #444;
+    --color_b: #b05c3f;
+    --color_c: #e2dbd3;
+    --color_d: #fff;
+
+    --w_button: 300px;
+    --h_button: 30px;
+    --pTop_button: 10px;
+    --pRight_button: 10px;
+    --pBottom_button: 0px;
+	--pLeft_button: 10px;
+	
+	--w_pixel: 50px;
+	--h_pixel: 50px;
+
+    /* Attributes */
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color_c);
+    font-size: 13px;
+    font-family: lato, sans-serif;
+    font-weight: 400;
+    color: var(--color_a);
+    line-height: 140%;
+    letter-spacing: 1px;
 }
 
-.container {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
-	height: 100vh;
+h1 {
+	font-size: 32px;
 }
 
-#canvas {
-	width: 1200px;
-	height: 600px;
-	border: 1px solid red;
+h2 {
+	font-size: 27px;
 }
 
-input,
-.button {
-	--w: 300px;
-	--py: 5px;
-	--px: 10px;
-	width: var(--w);
-	height: 30px;
-	border: 0;
-	padding: var(--py) var(--px);
+span {
+	font-size: 24px;
 }
-input[type="submit"],
-.button {
-	border: none;
-	width: calc(2 * var(--px) + var(--w));
-	background-color: #b05c3f;
-	color: #fff;
+
+span > span {
+	font-size: 12px;
+}
+
+a {
+    display: block;
+    width: var(--w_button);
+    height: var(--h_button);
+    border: 0;
+    padding: var(--pTop_button) var(--pRight_button) var(--pBottom_button) var(--pLeft_button);
+    background-color: var(--color_b);
+    color: var(--color_d);
+    text-align: center;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.5s;
+}
+
+a:hover {
+    background-color: var(--color_a);
+}
+
+input {
+    width: var(--w_button);
+    height: calc(var(--h_button) - var(--pTop_button));
+    border: 0;
+    padding: var(--pTop_button) var(--pRight_button);
 }
 
 .center {
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.row {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-around;
-	align-items: center;
+.hflex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
 }
 
-.col {
-	width: calc(50% - 30px);
-	margin: 15px;
-}
-
-.contRender {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: start;
-	align-items: flex-start;
-	width: calc(600px * 2);
+.vflex {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .pixel {
 	display: inline-block;
-	width: var(--c);
-	height: var(--c);
+	width: var(--w_pixel);
+	height: var(--h_pixel);
+}
+
+#game {
+	top: 150%;
+}
+
+.moveToForeignTop {
+	transition: 2s;
+	transition-timing-function: ease-in-out;
+	top: -100% !important;
+}
+
+.moveToCenterY {
+	transition: 2s;
+	transition-timing-function: ease-in-out;
+	top: 50% !important;
 }

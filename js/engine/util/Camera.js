@@ -106,7 +106,7 @@ class Camera extends Stageable {
         }
     }
 
-    getFrame(type='raw', mode='ini') { // TODO: other mode
+    getFrame(type='raw', mode='ini', lighting=true) { // TODO: other mode
         if (this.ghost)
             throw new Error("I'm a fucking ghost! >3<");
 
@@ -131,7 +131,7 @@ class Camera extends Stageable {
                 ray.d = d;
 
                 // Ray creation per pixel
-                const color = ray.getColor('direct').me;
+                const color = ray.getColor(lighting ? 'direct' : 'noLight').me;
                 if (type == 'raw')
                     this.raster[this.raster.length-1-j][i] = color;
                 else if (type == 'canvas') {
