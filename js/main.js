@@ -241,7 +241,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('cbLight').addEventListener('change', cbLight);
 });
 
-// set parameters
+// set parameters & mount
+document.documentElement.style.setProperty('--w_pixel', 750/dim + 'px');
+document.documentElement.style.setProperty('--h_pixel', 750/dim + 'px');
+document.getElementById('canvas').innerHTML = generateCanvasDivs(dim);
 document.getElementById('cbAnimation').checked = running;
 document.getElementById('cbLight').checked = lighting;
 document.getElementById('secretInput').focus();

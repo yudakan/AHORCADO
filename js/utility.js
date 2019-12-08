@@ -43,3 +43,18 @@ const pad = (n, width, z) => {
 	n = n + "";
 	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 };
+
+// generator canvas function
+const generateCanvasDivs = (dim) => {
+	let canvas = '';
+	for (let j=0; j < dim; j++) {
+		canvas += '<div class="hflex">';
+
+		for (let i=0; i < dim; i++)
+			canvas += '<div id="pix'+(j*dim+i)+'" class="pixel"></div>';
+
+		canvas += '</div>';
+	}
+
+	return canvas;
+}
