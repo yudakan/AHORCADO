@@ -66,8 +66,11 @@ cam.mountContent();
 ========== RUN MECHANICS                        ==========
 ========================================================*/
 // settings
-let running = true;
+let animation = true;
+let runningIntention = true;
+let running = false;
 let lighting = false;
+let imUnique = true;
 
 // logic
 let secret = null;
@@ -102,12 +105,19 @@ const update = () => {
 };
 
 const run = async () => {
-	do {
-		update();
-		render();
-		await new Promise(resolve => setTimeout(resolve, 1000/60));
+	if (!imUnique) return false;
+	while (true) {
+		while (runningIntention && animation) {
+			imUnique = false;
+			running = true;
+			update();
+			render();
+			await new Promise(resolve => setTimeout(resolve, 1000/60));
+		}
+		running = false;
+
+		await new Promise(resolve => setTimeout(resolve, 50));
 	}
-	while (running);
 };
 
 const logic = () => {
@@ -170,26 +180,37 @@ const guessIntent = async () => {
 	if (!guessIntentWorking)
 		guessIntentWorking = true;
 
-	if ( !logic() ) return;
-	run()
+	if (!logic()) return;
+	if (!running) render();
 	guessIntentWorking = false;
 };
 
 // controls
-const play = () => {
-	running = true;
-	run();
+const play = () => runningIntention = true;
+const stop = () => runningIntention = false;
+const animationOn = async () => {
+	animation = true;
+	play();
 };
-const stop = () => running = false;
-const lightOn = () => lighting = true;
-const lightOff = () => lighting = false;
+const animationOff = async () => {
+	animation = false;
+	stop();
+};
+const lightOn = async () => {
+	lighting = true;
+	if (!running) render();
+}
+const lightOff = async () => {
+	lighting = false;
+	if (!running) render();
+}
 
 
 /*========================================================
 ========== HTML interaction                     ==========
 ========================================================*/
 // settings
-const cbAnimation = function() { this.checked ? play() : stop() };
+const cbAnimation = function() { this.checked ? animationOn() : animationOff() };
 const cbLight = function() { this.checked ? lightOn() : lightOff() };
 
 // play button
@@ -206,6 +227,8 @@ const secretButton = () => {
 	let arrSecret = secretText.toLowerCase().split('');
 	let arrDiscovered = Utilities.createArray(secretText.length, false);
 	secret = [arrSecret, arrDiscovered];
+
+	run();
 
     document.getElementById('ini').classList.add('moveToForeignTop');
 	document.getElementById('game').classList.add('moveToCenterY');
@@ -245,6 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
 document.documentElement.style.setProperty('--w_pixel', 750/dim + 'px');
 document.documentElement.style.setProperty('--h_pixel', 750/dim + 'px');
 document.getElementById('canvas').innerHTML = generateCanvasDivs(dim);
-document.getElementById('cbAnimation').checked = running;
+document.getElementById('cbAnimation').checked = runningIntention;
 document.getElementById('cbLight').checked = lighting;
 document.getElementById('secretInput').focus();
