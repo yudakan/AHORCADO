@@ -1,8 +1,8 @@
 html, body {
     /* Vars o3o */
     --color_a: #444;
-    --color_b: #b05c3f;
-    --color_c: #e2dbd3;
+    --color_b: #555990;
+    --color_c: #fff85d;
     --color_d: #fff;
 
     --w_button: 300px;
@@ -10,10 +10,13 @@ html, body {
     --pTop_button: 10px;
     --pRight_button: 10px;
     --pBottom_button: 0px;
-	--pLeft_button: 10px;
+    --pLeft_button: 10px;
+    
+    --w_cb: 20px;
+    --h_cb: 20px;
 	
-	--w_pixel: 50px;
-	--h_pixel: 50px;
+	--w_pixel: 15px;
+	--h_pixel: 15px;
 
     /* Attributes */
     width: 100vw;
@@ -63,11 +66,16 @@ a:hover {
     background-color: var(--color_a);
 }
 
-input {
+input[type="text"] {
     width: var(--w_button);
     height: calc(var(--h_button) - var(--pTop_button));
     border: 0;
     padding: var(--pTop_button) var(--pRight_button);
+}
+
+input[type="checkbox"] {
+    width: var(--w_cb);
+    height: var(--h_cb);
 }
 
 .center {
@@ -114,4 +122,9 @@ input {
 	transition: 2s;
 	transition-timing-function: ease-in-out;
 	top: 50% !important;
+}
+
+#config {
+    width: var(--w_button);
+    padding: 30px 0px;
 }

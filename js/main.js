@@ -1,125 +1,124 @@
+// Scene
+const dim = 50;
+const cam = new Camera(new CamSettings( 1, 1, dim, dim, ));
+
+const tribg = new Triangle([ new Vector([-50, 2, 100]), new Vector([-50, 2, -100]), new Vector([50, 2, 0]) ]);
+
+const suport = new Null();
+const head = new Null();
+const nene = new Null();
+const allObjs = new Null();
+
+const suport0 = loadObj(SUPORT0);
+const suport1 = loadObj(SUPORT1);
+const suport2 = loadObj(SUPORT2);
+const suport3 = loadObj(SUPORT3);
+
+const nene0 = loadObj(NENE0);
+const face = loadObj(FACE);
+const nene1 = loadObj(NENE1);
+const nene2 = loadObj(NENE2);
+const nene3 = loadObj(NENE3);
+const nene4 = loadObj(NENE4);
+const nene5 = loadObj(NENE5);
+
+suport.add([ suport0, suport1, suport2, suport3 ]);
+head.add([ nene0, face ]);
+nene.add([ head, nene1, nene2, nene3, nene4, nene5 ]);
+allObjs.add([ suport, nene, tribg ]);
+
+allObjs.tr.translateFromOrigin(new Vector([ 1, 25, 1 ]));
+suport.tr.rotateX(Math.PI/2);
+suport.tr.translateFromOrigin(new Vector([ -6.5, 0.01, 0 ]));
+nene.tr.rotateX(Math.PI/2);
+nene.tr.translateFromOrigin(new Vector([ 3.5, 0, 5 ]));
+face.tr.translateFromOrigin(new Vector([ 0, 0, 0.001 ]));
+
+// suport.objects.forEach(e => e.setGhost(true));
+// nene.objects.forEach(e => e.setGhost(true));
+suport.objects.forEach(e => e.setColor(new Color(85 << 16 | 89 << 8 | 144)));
+nene.objects.filter(e => e instanceof Mesh).forEach(e => e.setColor(new Color(255 << 16 | 176 << 8 | 149)));
+
+tribg.setColor(new Color(219 << 16 | 123 << 8 | 81));
+nene0.setColor(Color.WHITE);
+face.setColor(Color.PURPLE);
+face.objects[2].setColor(new Color(85 << 16 | 89 << 8 | 144));
+face.objects[3].setColor(new Color(85 << 16 | 89 << 8 | 144));
+
+const light = new Light();
+
+const scene = new Scene();
+scene.add([ cam, light, allObjs ]);
+
+// Run
+let running = true;
+let lighting = false;
+let rot = 0;
+let rotSign = 1;
+const ROT_MAX = 10;
+let frames = 0;
+
+const render = mode => {
+    const raster = cam.getFrame('raw', mode, lighting);
+
+    for (let j=0; j < dim; j++)
+        for (let i=0; i < dim; i++)
+            document.getElementById('pix'+(j*dim+i)).style.backgroundColor =
+                `#${pad(new Number( raster[j][i] ).toString(16), 6)}`;
+};
+
+const update = () => {
+	// light move
+	light.tr.translateFromOrigin(new Vector([ Math.cos(frames/10)*10, 21.5, Math.sin(frames/10)*10 ]));
+
+	// nene rotate
+	if (Math.abs(rot) > ROT_MAX)
+		rotSign *= -1;
+
+	nene.tr.rotateZ(Math.PI/128 * rotSign);
+	rot += rotSign;
+
+	frames++;
+};
+
+const guessIntent = async () => {
+
+	cam.mountContent();
+
+	// Run
+    do {
+		update();
+		render('noIni');
+		console.log('rendered');
+		await new Promise(resolve => setTimeout(resolve, 1000/60));
+	}
+	while (running);
+};
+
+const play = () => {
+	running = true;
+	guessIntent();
+};
+const stop = () => running = false;
+const lightOn = () => lighting = true;
+const lightOff = () => lighting = false;
+
 // html interaction
+const cbAnimation = function() { this.checked ? play() : stop() };
+const cbLight = function() { this.checked ? lightOn() : lightOff() };
 const secretButton = () => {
     document.getElementById('ini').classList.add('moveToForeignTop');
-    document.getElementById('game').classList.add('moveToCenterY');
+	document.getElementById('game').classList.add('moveToCenterY');
+	//...
+	
 }
 
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('secretButton').addEventListener('click', secretButton);
 	document.getElementById('guessButton').addEventListener('click', guessIntent);
+	document.getElementById('cbAnimation').addEventListener('change', cbAnimation);
+	document.getElementById('cbLight').addEventListener('change', cbLight);
 });
 
-// construct square
-const tri0 = new Triangle([new Vector([0,0,1]), new Vector([0,0,0]), new Vector([1,0,0])], Color.AQUA );
-const tri1 = new Triangle([new Vector([0,0,1]), new Vector([1,0,1]), new Vector([1,0,0])], Color.AQUA );
-
-const square = new Mesh();
-square.add([tri0, tri1]);
-square.tr.translateFromOrigin(new Vector([ 0, 3, 0 ]));
-
-// camera
-const cam = new Camera(new CamSettings( 1, 1, 15, 15 ));
-
-// scene
-const scene = new Scene();
-scene.add([ cam ]);
-
-// render
-const pad = (n, width, z) => {
-	z = z || "0";
-	n = n + "";
-	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-};
-
-const render = () => {
-    const raster = cam.getFrame('raw', 'ini', false);
-
-    for (let j=0; j < 15; j++)
-        for (let i=0; i < 15; i++)
-            document.getElementById('pix'+(j*15+i)).style.backgroundColor =
-                `#${pad(new Number( raster[j][i] ).toString(16), 6)}`;
-};
-
-const guessIntent = async () => {
-    // while (true) {
-        render();
-        // square.tr.translate(new Vector([ -0.01, 0, -0.01 ]));
-        // await new Promise(resolve => setTimeout(resolve, 1000/27));
-    // }
-};
-
-/*====================================================
- * LOAD OBJ FUNCTION
- *====================================================*/
-const loadObjFile = async event => {
-
-	// Read file contents
-	const text = OBJ;
-	const lines = text.split(/[\r\n]+/g);
-
-	// Create mesh
-	let mesh = new Mesh();
-
-	// Create data storage
-	const vectors = [];
-	const triangles = [];
-
-	// Process file
-	lines.forEach(line => {
-		if (line === "") return;
-
-		// Process each line
-		const data = line.split(" ");
-		const type = data[0];
-		const values = data.slice(1).map(i => parseFloat(i));
-
-		if (type === "v") {
-			vectors.push(new Vector(values));
-			return;
-		}
-
-		if (type === "f") {
-			triangles.push(new Triangle([vectors[values[0] - 1].clone(), vectors[values[1] - 1].clone(), vectors[values[2] - 1].clone()]));
-			return;
-		}
-	});
-
-	mesh.add(triangles);
-
-	// Add mest to scene and render
-	scene.add([mesh]);
-};
-
-const OBJ =
-"o Plane\n"+
-"v -1.000000 -9.750000 -1.750000\n"+
-"v 1.000000 -9.750000 -1.750000\n"+
-"v -1.000000 8.250000 -1.750000\n"+
-"v 1.000000 8.250000 -1.750000\n"+
-"s off\n"+
-"f 2 3 1\n"+
-"f 2 4 3\n"+
-"o Plane.001\n"+
-"v -5.000000 -11.750000 -1.750000\n"+
-"v 5.000000 -11.750000 -1.750000\n"+
-"v -5.000000 -9.750000 -1.750000\n"+
-"v 5.000000 -9.750000 -1.750000\n"+
-"s off\n"+
-"f 6 7 5\n"+
-"f 6 8 7\n"+
-"o Plane.002\n"+
-"v 1.000000 6.250000 -1.750000\n"+
-"v 11.000000 6.250000 -1.750000\n"+
-"v 1.000000 8.250000 -1.750000\n"+
-"v 11.000000 8.250000 -1.750000\n"+
-"s off\n"+
-"f 10 11 9\n"+
-"f 10 12 11\n"+
-"o Plane.003\n"+
-"v 9.500000 2.250000 -1.750000\n"+
-"v 10.500000 2.250000 -1.750000\n"+
-"v 9.500000 6.250000 -1.750000\n"+
-"v 10.500000 6.250000 -1.750000\n"+
-"s off\n"+
-"f 14 15 13\n"+
-"f 14 16 15";
+document.getElementById('cbAnimation').checked = running;
+document.getElementById('cbLight').checked = lighting;
