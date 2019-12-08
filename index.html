@@ -28,7 +28,7 @@
 
 		<div id="game" class="center">
 			<div class="hflex">
-				<div class="vflex">
+				<div id="cpanel" class="vflex">
 					<h2>Guess what owo !</h2>
 					<input id="guessInput" type="text" placeholder="So... tell me 7v7" />
 					<a id="guessButton" href="#">Try nwn</a>
@@ -36,6 +36,7 @@
 						<span><input id="cbAnimation" type="checkbox" /> Animation</span>
 						<span><input id="cbLight" type="checkbox" /> Lighting</span>
 					</div>
+					<p id="viewer"></p>
 				</div>
 				<div class="vflex">
 					<div id="canvas" class="vflex">
@@ -46,6 +47,22 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="win" class="center">
+			<div class="vflex">
+				<h1 class="hugeText">YOU WIN ^o^</h1>
+				<h1>This creepie game ._.</h1>
+			</div>
+		</div>
+
+		<div id="lose" class="center">
+			<div class="vflex">
+				<h1 class="hugeText">LOSER =o=</h1>
+				<h1>but I still love you ¬w¬</h1>
+			</div>
+		</div>
+
+		<span id="marc">by yka yudakan n.n</span>
 
 		<script src="js/engine/util/quantum/Utilities.js"></script>
 		<script src="js/engine/util/quantum/Gauss.js"></script>
